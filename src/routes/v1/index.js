@@ -1,16 +1,19 @@
-const express = require('express');
-const { StatusCodes } = require('http-status-codes');
-const userRoute = require('./userRoute')
+const express = require("express");
+const { StatusCodes } = require("http-status-codes");
+const UserRoute = require("./userRoute");
+const AuthRoute = require("./authRoute");
 
-const Router = express.Router()
+const Router = express.Router();
 
 // Check APIs v1/status
-Router.get('/status', (req, res) => {
+Router.get("/status", (req, res) => {
   res.status(StatusCodes.OK).json({
-    message: 'APIs v1 are ready to use.'
-  })
-})
+    message: "APIs v1 are ready to use.",
+  });
+});
 
-Router.use('/users', userRoute)
+Router.use("/auth", AuthRoute);
 
-module.exports = Router
+Router.use("/users", UserRoute);
+
+module.exports = Router;

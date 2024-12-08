@@ -1,21 +1,43 @@
-const { StatusCodes } = require("http-status-codes")
-const userModel = require("../models/userModel")
-const ApiError = require("../utils/ApiError")
+const { StatusCodes } = require("http-status-codes");
+const UserModel = require("../models/userModel");
+const ApiError = require("../utils/ApiError");
+const bcrypt = require("bcryptjs");
 
-const userService = {
+const UserService = {
   createNew: async (reqBody) => {
     try {
       const newUser = {
-        ...reqBody
+        ...reqBody,
+      };
+
+      const existUser = await UserModel.getByEmail(newUser?.email);
+      if (existUser) {
+        throw new ApiError(StatusCodes.BAD_REQUEST, "Email đã tồn tại");
       }
 
-      const createdUser = await userModel.createNew(newUser)
+      const hash = bcrypt.hashSync(newUser.password, 12);
+      newUser.password = hash;
 
-      return createdUser
+      const createdUser = await UserModel.createNew(newUser);
+
+      return createdUser;
     } catch (error) {
-      throw error
+      throw error;
     }
-  }
-}
+  },
 
-module.exports = userService
+  getByEmail: async (email) => {
+    try {
+      const existUser = await UserModel.getByEmail(email);
+      if (!existUser) {
+        throw new ApiError(StatusCodes.NOT_FOUND, "Tài khoản không tồn tại");
+      }
+
+      return existUser;
+    } catch (error) {
+      throw error;
+    }
+  },
+};
+
+module.exports = UserService;

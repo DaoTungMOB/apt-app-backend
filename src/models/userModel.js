@@ -2,6 +2,7 @@ const Joi = require("joi");
 const { getDB } = require("../config/mongodb");
 const ApiError = require("../utils/ApiError");
 const { StatusCodes } = require("http-status-codes");
+const { ObjectId } = require("mongodb");
 
 const USER_COLLECTION_NAME = "users";
 
@@ -24,13 +25,27 @@ const UserModel = {
     }
   },
 
-  getByEmail: async (email) => {
+  findOne: async (id) => {
     try {
-      const result = getDB()
+      const user = await getDB()
+        .collection(USER_COLLECTION_NAME)
+        .findOne({
+          _id: new ObjectId(id),
+        });
+
+      return user;
+    } catch (error) {
+      throw error;
+    }
+  },
+
+  fineOneByEmail: async (email) => {
+    try {
+      const user = getDB()
         .collection(USER_COLLECTION_NAME)
         .findOne({ email: email });
 
-      return result;
+      return user;
     } catch (error) {
       throw error;
     }

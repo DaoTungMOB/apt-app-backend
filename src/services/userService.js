@@ -10,7 +10,7 @@ const UserService = {
         ...reqBody,
       };
 
-      const existUser = await UserModel.getByEmail(newUser?.email);
+      const existUser = await UserModel.fineOneByEmail(newUser?.email);
       if (existUser) {
         throw new ApiError(StatusCodes.BAD_REQUEST, "Email đã tồn tại");
       }
@@ -26,9 +26,22 @@ const UserService = {
     }
   },
 
+  getById: async (id) => {
+    try {
+      const user = await UserModel.findOne(id);
+      if (!user) {
+        throw new ApiError(StatusCodes.NOT_FOUND, "No user found");
+      }
+
+      return user;
+    } catch (error) {
+      throw error;
+    }
+  },
+
   getByEmail: async (email) => {
     try {
-      const existUser = await UserModel.getByEmail(email);
+      const existUser = await UserModel.fineOneByEmail(email);
       if (!existUser) {
         throw new ApiError(StatusCodes.NOT_FOUND, "Tài khoản không tồn tại");
       }

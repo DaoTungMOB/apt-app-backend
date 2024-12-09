@@ -2,6 +2,7 @@ const express = require("express");
 const { StatusCodes } = require("http-status-codes");
 const UserRoute = require("./userRoute");
 const AuthRoute = require("./authRoute");
+const AdminRoute = require("./admin");
 
 const Router = express.Router();
 
@@ -15,5 +16,7 @@ Router.get("/status", (req, res) => {
 Router.use("/auth", AuthRoute);
 
 Router.use("/users", UserRoute);
+
+Router.use("/admin", AdminRoute);
 
 module.exports = Router;

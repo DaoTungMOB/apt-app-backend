@@ -33,6 +33,7 @@ const AuthMiddleware = {
 
   isAdmin: async (req, res, next) => {
     try {
+      console.log("payload", req.payload);
       if (req.payload.role !== "admin") {
         next(
           new ApiError(

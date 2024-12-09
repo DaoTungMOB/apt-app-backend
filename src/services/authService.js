@@ -16,7 +16,7 @@ const AuthService = {
         ...reqBody,
       };
 
-      const existUser = await UserModel.getByEmail(newUser?.email);
+      const existUser = await UserModel.fineOneByEmail(newUser?.email);
       if (existUser) {
         throw new ApiError(StatusCodes.BAD_REQUEST, "Email đã tồn tại");
       }

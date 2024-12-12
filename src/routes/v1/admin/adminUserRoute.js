@@ -6,6 +6,6 @@ const Router = express.Router();
 
 Router.route("/:id").get(isAuth, isAdmin, AdminUserController.getOne);
 
-// Router.route("/").post(isAuth, isAdmin);
+Router.route("/").get(isAuth, isAdmin, AdminUserController.getAll);
 
 module.exports = Router;

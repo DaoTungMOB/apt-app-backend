@@ -13,6 +13,16 @@ const AdminUserController = {
       next(error);
     }
   },
+
+  getAll: async (req, res, next) => {
+    try {
+      const users = await UserService.getAll();
+
+      return res.status(StatusCodes.OK).json(users);
+    } catch (error) {
+      next(error);
+    }
+  },
 };
 
 module.exports = AdminUserController;

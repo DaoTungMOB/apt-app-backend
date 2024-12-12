@@ -10,6 +10,7 @@ const {
   ONLY_UNICODE_MESSAGE,
 } = require("../utils/validators");
 const { StatusCodes } = require("http-status-codes");
+const ApiError = require("../utils/ApiError");
 
 const AuthValidation = {
   createNew: async (req, res, next) => {

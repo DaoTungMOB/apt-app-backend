@@ -4,6 +4,9 @@ const { StatusCodes } = require("http-status-codes");
 const { env } = require("../config/environment");
 const AuthUtil = require("../utils/auth");
 
+const ADMIN_ROLE = "admin";
+const USER_ROLE = "user";
+
 const AuthMiddleware = {
   isAuth: async (req, res, next) => {
     try {
@@ -34,7 +37,7 @@ const AuthMiddleware = {
   isAdmin: async (req, res, next) => {
     try {
       console.log("payload", req.payload);
-      if (req.payload.role !== "admin") {
+      if (req.payload.role !== ADMIN_ROLE) {
         next(
           new ApiError(
             StatusCodes.FORBIDDEN,

@@ -26,6 +26,19 @@ const UserService = {
     }
   },
 
+  getAll: async () => {
+    try {
+      const users = await UserModel.findAll();
+      if (!users) {
+        throw new ApiError(StatusCodes.NOT_FOUND, "No users found");
+      }
+
+      return users;
+    } catch (error) {
+      throw error;
+    }
+  },
+
   getById: async (id) => {
     try {
       const user = await UserModel.findOne(id);

@@ -25,6 +25,19 @@ const UserModel = {
     }
   },
 
+  findAll: async () => {
+    try {
+      const users = await getDB()
+        .collection(USER_COLLECTION_NAME)
+        .find()
+        .toArray();
+
+      return users;
+    } catch (error) {
+      throw error;
+    }
+  },
+
   findOne: async (id) => {
     try {
       const user = await getDB()

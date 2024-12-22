@@ -29,6 +29,40 @@ const UserModel = {
     try {
       const users = await getDB()
         .collection(USER_COLLECTION_NAME)
+        .find({
+          deletedAt: {
+            $eq: null,
+          },
+        })
+        .toArray();
+
+      return users;
+    } catch (error) {
+      throw error;
+    }
+  },
+
+  findAllDeleted: async () => {
+    try {
+      const users = await getDB()
+        .collection(USER_COLLECTION_NAME)
+        .find({
+          deletedAt: {
+            $ne: null,
+          },
+        })
+        .toArray();
+
+      return users;
+    } catch (error) {
+      throw error;
+    }
+  },
+
+  findAllWithDeleted: async () => {
+    try {
+      const users = await getDB()
+        .collection(USER_COLLECTION_NAME)
         .find()
         .toArray();
 

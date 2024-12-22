@@ -11,6 +11,27 @@ const ApartmentController = {
       next(error);
     }
   },
+
+  getOne: async (req, res, next) => {
+    try {
+      const { id } = req.params;
+      const apartment = await ApartmentService.getById(id);
+
+      return res.status(StatusCodes.OK).json(apartment);
+    } catch (error) {
+      next(error);
+    }
+  },
+
+  getAll: async (req, res, next) => {
+    try {
+      const apartments = await ApartmentService.getAll();
+
+      return res.status(StatusCodes.OK).json(apartments);
+    } catch (error) {
+      next(error);
+    }
+  },
 };
 
 module.exports = ApartmentController;

@@ -27,6 +27,40 @@ const ApartmentModel = {
     try {
       const apartments = await getDB()
         .collection(APARTMENT_COLLECTION_NAME)
+        .find({
+          deletedAt: {
+            $eq: null,
+          },
+        })
+        .toArray();
+
+      return apartments;
+    } catch (error) {
+      throw error;
+    }
+  },
+
+  findAllDeleted: async () => {
+    try {
+      const apartments = await getDB()
+        .collection(APARTMENT_COLLECTION_NAME)
+        .find({
+          deletedAt: {
+            $ne: null,
+          },
+        })
+        .toArray();
+
+      return apartments;
+    } catch (error) {
+      throw error;
+    }
+  },
+
+  findAllWithDeleted: async () => {
+    try {
+      const apartments = await getDB()
+        .collection(APARTMENT_COLLECTION_NAME)
         .find()
         .toArray();
 

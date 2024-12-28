@@ -1,4 +1,3 @@
-const Joi = require("joi");
 const { getDB } = require("../config/mongodb");
 const ApiError = require("../utils/ApiError");
 const { StatusCodes } = require("http-status-codes");
@@ -6,7 +5,7 @@ const { ObjectId } = require("mongodb");
 
 const USER_COLLECTION_NAME = "users";
 
-const INVALID_UPDATE_FIELDS = ["_id", "createdAt"];
+const INVALID_UPDATE_FIELDS = ["_id", "password", "createdAt"];
 
 const UserModel = {
   createNew: async (data) => {
@@ -93,6 +92,39 @@ const UserModel = {
         .findOne({ email: email });
 
       return user;
+    } catch (error) {
+      throw error;
+    }
+  },
+
+  updateOne: async (_id, updateData) => {
+    try {
+      INVALID_UPDATE_FIELDS.forEach((field) => {
+        if (updateData.hasOwnProperty(field)) {
+          delete updateData[field];
+        }
+      });
+      if (Object.keys(updateData).length > 0) {
+        updateData.updatedAt = Date.now();
+      }
+
+      const result = await getDB()
+        .collection(USER_COLLECTION_NAME)
+        .findOneAndUpdate(
+          { _id: new ObjectId(_id) },
+          {
+            $set: { ...updateData },
+          },
+          {
+            returnDocument: "after",
+          }
+        );
+
+      if (!result) {
+        throw new ApiError(StatusCodes.NOT_FOUND, "No user found");
+      }
+
+      return result;
     } catch (error) {
       throw error;
     }

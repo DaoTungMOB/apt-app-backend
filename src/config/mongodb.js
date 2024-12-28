@@ -29,6 +29,10 @@ const closeDB = async () => {
 };
 
 // export database instance
+/**
+ *
+ * @returns {import('mongodb').Db}
+ */
 const getDB = () => {
   if (!trelloDbInstance) {
     throw new Error("Must connect to database first!");

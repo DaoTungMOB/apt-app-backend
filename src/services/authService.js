@@ -1,10 +1,10 @@
 const { StatusCodes } = require("http-status-codes");
 const ApiError = require("../utils/ApiError");
-const AuthUtil = require("../utils/auth");
 const UserService = require("./userService");
 const bcrypt = require("bcryptjs");
 const { env } = require("../config/environment");
 const UserModel = require("../models/userModel");
+const { generateToken, verifyToken } = require("../utils/auth");
 
 const accessTokenLife = "86400000";
 const refreshTokenLife = "2592000000";
@@ -39,7 +39,7 @@ const AuthService = {
       if (!existUser) {
         throw new ApiError(
           StatusCodes.UNAUTHORIZED,
-          "Email hoặc mật khẩu không chính xác!",
+          "Email hoặc mật khẩu không chính xác!"
         );
       }
 
@@ -47,11 +47,11 @@ const AuthService = {
       if (!checkPass) {
         throw new ApiError(
           StatusCodes.UNAUTHORIZED,
-          "Email hoặc mật khẩu không chính xác!",
+          "Email hoặc mật khẩu không chính xác!"
         );
       }
 
-      const accessToken = AuthUtil.generateToken(
+      const accessToken = generateToken(
         {
           email,
           role: existUser.role,
@@ -59,28 +59,28 @@ const AuthService = {
           lastName: existUser.lastName,
         },
         env.ACCESS_SECRET_KEY,
-        accessTokenLife,
+        accessTokenLife
       );
       if (!accessToken) {
         console.log("Tạo mã thất bại");
         throw new ApiError(
           StatusCodes.INTERNAL_SERVER_ERROR,
-          "Internal server error",
+          "Internal server error"
         );
       }
 
-      const refreshToken = AuthUtil.generateToken(
+      const refreshToken = generateToken(
         {
           email,
         },
         env.REFRESH_SERCET_KEY,
-        refreshTokenLife,
+        refreshTokenLife
       );
       if (!refreshToken) {
         console.log("Tạo mã thất bại");
         throw new ApiError(
           StatusCodes.INTERNAL_SERVER_ERROR,
-          "Internal server error",
+          "Internal server error"
         );
       }
 
@@ -100,9 +100,9 @@ const AuthService = {
         throw new ApiError(StatusCodes.BAD_REQUEST, "Thiếu tham số đầu vào");
       }
 
-      const verifyRefreshToken = AuthUtil.verifyToken(
+      const verifyRefreshToken = verifyToken(
         refreshToken,
-        env.REFRESH_SERCET_KEY,
+        env.REFRESH_SERCET_KEY
       );
 
       if (!verifyRefreshToken) {
@@ -110,11 +110,11 @@ const AuthService = {
       }
 
       const existUser = await UserService.getByEmail(
-        verifyRefreshToken?.payload?.email,
+        verifyRefreshToken?.payload?.email
       );
 
       // Tạo mã
-      const newAccessToken = AuthUtil.generateToken(
+      const newAccessToken = generateToken(
         {
           email: existUser.email,
           role: existUser.role,
@@ -122,28 +122,28 @@ const AuthService = {
           lastName: existUser.lastName,
         },
         env.ACCESS_SECRET_KEY,
-        accessTokenLife,
+        accessTokenLife
       );
       if (!newAccessToken) {
         console.log("Tạo mã thất bại");
         throw new ApiError(
           StatusCodes.INTERNAL_SERVER_ERROR,
-          "Internal server error",
+          "Internal server error"
         );
       }
 
-      const newRefreshToken = AuthUtil.generateToken(
+      const newRefreshToken = generateToken(
         {
           email: existUser.email,
         },
         env.REFRESH_SERCET_KEY,
-        refreshTokenLife,
+        refreshTokenLife
       );
       if (!newRefreshToken) {
         console.log("Tạo mã thất bại");
         throw new ApiError(
           StatusCodes.INTERNAL_SERVER_ERROR,
-          "Internal server error",
+          "Internal server error"
         );
       }
 

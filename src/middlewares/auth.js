@@ -2,10 +2,7 @@ const { JsonWebTokenError } = require("jsonwebtoken");
 const ApiError = require("../utils/ApiError");
 const { StatusCodes } = require("http-status-codes");
 const { env } = require("../config/environment");
-const AuthUtil = require("../utils/auth");
-
-const ADMIN_ROLE = "admin";
-const USER_ROLE = "user";
+const { ROLE, verifyToken } = require("../utils/auth");
 
 const AuthMiddleware = {
   isAuth: async (req, res, next) => {
@@ -16,10 +13,7 @@ const AuthMiddleware = {
       }
       const accessToken = token.split(" ")[1];
 
-      const verifiedToken = AuthUtil.verifyToken(
-        accessToken,
-        env.ACCESS_SECRET_KEY,
-      );
+      const verifiedToken = verifyToken(accessToken, env.ACCESS_SECRET_KEY);
       if (!verifiedToken) {
         throw new ApiError(StatusCodes.UNAUTHORIZED, "Invalid token");
       }
@@ -36,12 +30,12 @@ const AuthMiddleware = {
 
   isAdmin: async (req, res, next) => {
     try {
-      if (req.payload.role !== ADMIN_ROLE) {
+      if (req.payload.role !== ROLE.ADMIN) {
         next(
           new ApiError(
             StatusCodes.FORBIDDEN,
-            "You do not have permission to access this resource!",
-          ),
+            "You do not have permission to access this resource!"
+          )
         );
       }
 

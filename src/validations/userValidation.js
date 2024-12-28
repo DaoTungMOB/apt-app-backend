@@ -12,6 +12,7 @@ const {
   PHONE_MESSAGE,
 } = require("../utils/validators");
 const { StatusCodes } = require("http-status-codes");
+const { ROLE } = require("../utils/auth");
 
 const UserValidation = {
   createNew: async (req, res, next) => {
@@ -36,6 +37,34 @@ const UserValidation = {
         .pattern(ONLY_UNICODE_RULE)
         .message(ONLY_UNICODE_MESSAGE)
         .required(),
+    });
+
+    try {
+      await schema.validateAsync(req.body, { abortEarly: false });
+
+      next();
+    } catch (error) {
+      next(new ApiError(StatusCodes.UNPROCESSABLE_ENTITY, error.message));
+    }
+  },
+
+  updateOne: async (req, res, next) => {
+    const schema = Joi.object({
+      email: Joi.string().email(),
+      cccd: Joi.string().pattern(CCCD_RULE).messages({
+        "string.pattern.base": CCCD_MESSAGE,
+      }),
+      birthDay: Joi.date(),
+      phone: Joi.string().pattern(PHONE_RULE).messages({
+        "string.pattern.base": PHONE_MESSAGE,
+      }),
+      role: Joi.string().valid(...Object.values(ROLE)),
+      firstName: Joi.string()
+        .pattern(ONLY_UNICODE_RULE)
+        .message(ONLY_UNICODE_MESSAGE),
+      lastName: Joi.string()
+        .pattern(ONLY_UNICODE_RULE)
+        .message(ONLY_UNICODE_MESSAGE),
     });
 
     try {

@@ -23,6 +23,17 @@ const AdminUserController = {
       next(error);
     }
   },
+
+  updateOne: async (req, res, next) => {
+    try {
+      const { id } = req.params;
+      const updatedUser = await UserService.updateOne(id, req.body);
+
+      return res.status(StatusCodes.OK).json(updatedUser);
+    } catch (error) {
+      next(error);
+    }
+  },
 };
 
 module.exports = AdminUserController;

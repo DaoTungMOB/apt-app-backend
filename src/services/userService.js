@@ -64,6 +64,16 @@ const UserService = {
       throw error;
     }
   },
+
+  updateOne: async (id, reqBody) => {
+    try {
+      const updatedUser = await UserModel.updateOne(id, reqBody);
+
+      return updatedUser;
+    } catch (error) {
+      throw error;
+    }
+  },
 };
 
 module.exports = UserService;

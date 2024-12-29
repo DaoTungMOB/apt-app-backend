@@ -87,7 +87,7 @@ const UserModel = {
 
   fineOneByEmail: async (email) => {
     try {
-      const user = getDB()
+      const user = await getDB()
         .collection(USER_COLLECTION_NAME)
         .findOne({ email: email });
 
@@ -97,7 +97,7 @@ const UserModel = {
     }
   },
 
-  updateOne: async (_id, updateData) => {
+  update: async (_id, updateData) => {
     try {
       INVALID_UPDATE_FIELDS.forEach((field) => {
         if (updateData.hasOwnProperty(field)) {
@@ -125,6 +125,19 @@ const UserModel = {
       }
 
       return result;
+    } catch (error) {
+      throw error;
+    }
+  },
+
+  softDelete: async (id) => {
+    try {
+      await getDB()
+        .collection(USER_COLLECTION_NAME)
+        .updateOne(
+          { _id: new ObjectId(id) },
+          { $set: { deletedAt: Date.now() } }
+        );
     } catch (error) {
       throw error;
     }

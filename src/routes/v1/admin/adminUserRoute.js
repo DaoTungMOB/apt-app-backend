@@ -7,12 +7,8 @@ const Router = express.Router();
 
 Router.route("/:id")
   .get(isAuth, isAdmin, AdminUserController.getOne)
-  .put(
-    isAuth,
-    isAdmin,
-    UserValidation.updateOne,
-    AdminUserController.updateOne
-  );
+  .put(isAuth, isAdmin, UserValidation.updateOne, AdminUserController.updateOne)
+  .delete(isAuth, isAdmin, AdminUserController.delete);
 
 Router.route("/").get(isAuth, isAdmin, AdminUserController.getAll);
 

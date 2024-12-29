@@ -65,11 +65,24 @@ const UserService = {
     }
   },
 
-  updateOne: async (id, reqBody) => {
+  update: async (id, reqBody) => {
     try {
-      const updatedUser = await UserModel.updateOne(id, reqBody);
+      const updatedUser = await UserModel.update(id, reqBody);
 
       return updatedUser;
+    } catch (error) {
+      throw error;
+    }
+  },
+
+  delete: async (id) => {
+    try {
+      const userExist = await UserModel.findOne(id);
+      if (!userExist) {
+        throw new ApiError(StatusCodes.NOT_FOUND, "No user found");
+      }
+
+      await UserModel.softDelete(id);
     } catch (error) {
       throw error;
     }

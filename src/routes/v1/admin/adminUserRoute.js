@@ -6,16 +6,17 @@ const UserValidation = require("../../../validations/userValidation");
 const Router = express.Router();
 
 Router.route("/:id")
+  .get(isAuth, isAdmin, AdminUserController.getOne)
+  .put(isAuth, isAdmin, UserValidation.updateOne, AdminUserController.updateOne)
+  .delete(isAuth, isAdmin, AdminUserController.delete);
+
+Router.route("/")
   .post(
     isAuth,
     isAdmin,
     UserValidation.createNew,
     AdminUserController.createNew
   )
-  .get(isAuth, isAdmin, AdminUserController.getOne)
-  .put(isAuth, isAdmin, UserValidation.updateOne, AdminUserController.updateOne)
-  .delete(isAuth, isAdmin, AdminUserController.delete);
-
-Router.route("/").get(isAuth, isAdmin, AdminUserController.getAll);
+  .get(isAuth, isAdmin, AdminUserController.getAll);
 
 module.exports = Router;

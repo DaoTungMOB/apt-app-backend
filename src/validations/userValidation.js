@@ -30,9 +30,7 @@ const UserValidation = {
       phone: Joi.string().required().pattern(PHONE_RULE).messages({
         "string.pattern.base": PHONE_MESSAGE,
       }),
-      role: Joi.string()
-        .valid(...Object.values(ROLE))
-        .message(ROLE_MESSAGE),
+      role: Joi.string().valid(...Object.values(ROLE)),
       firstName: Joi.string()
         .pattern(ONLY_UNICODE_RULE)
         .message(ONLY_UNICODE_MESSAGE)

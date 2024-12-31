@@ -10,6 +10,7 @@ const {
   CCCD_RULE,
   PHONE_RULE,
   PHONE_MESSAGE,
+  ROLE_MESSAGE,
 } = require("../utils/validators");
 const { StatusCodes } = require("http-status-codes");
 const { ROLE } = require("../utils/auth");
@@ -29,6 +30,9 @@ const UserValidation = {
       phone: Joi.string().required().pattern(PHONE_RULE).messages({
         "string.pattern.base": PHONE_MESSAGE,
       }),
+      role: Joi.string()
+        .valid(...Object.values(ROLE))
+        .message(ROLE_MESSAGE),
       firstName: Joi.string()
         .pattern(ONLY_UNICODE_RULE)
         .message(ONLY_UNICODE_MESSAGE)

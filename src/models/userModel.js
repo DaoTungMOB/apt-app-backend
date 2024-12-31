@@ -2,6 +2,7 @@ const { getDB } = require("../config/mongodb");
 const ApiError = require("../utils/ApiError");
 const { StatusCodes } = require("http-status-codes");
 const { ObjectId } = require("mongodb");
+const { ROLE } = require("../utils/auth");
 
 const USER_COLLECTION_NAME = "users";
 
@@ -12,7 +13,7 @@ const UserModel = {
     try {
       const fullData = {
         ...data,
-        role: "user",
+        role: data.role || ROLE.USER,
         createdAt: Date.now(),
         updatedAt: null,
         deletedAt: null,

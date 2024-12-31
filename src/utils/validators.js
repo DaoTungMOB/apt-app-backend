@@ -20,6 +20,8 @@ const CCCD_MESSAGE = "Không đúng định dạng CCCD";
 const PHONE_RULE = /^[0-9]{10}$/;
 const PHONE_MESSAGE = "Không đúng định dạng số điện thoại";
 
+const ROLE_MESSAGE = "Role không hợp lệ";
+
 module.exports = {
   OBJECT_ID_RULE,
   OBJECT_ID_RULE_MESSAGE,
@@ -35,4 +37,5 @@ module.exports = {
   CCCD_MESSAGE,
   PHONE_RULE,
   PHONE_MESSAGE,
+  ROLE_MESSAGE
 };

@@ -45,10 +45,10 @@ const AdminUserController = {
     }
   },
 
-  delete: async (req, res, next) => {
+  softDelete: async (req, res, next) => {
     try {
       const { id } = req.params;
-      await UserService.delete(id);
+      await UserService.softDelete(id);
 
       return res.status(StatusCodes.OK).json({
         message: "Deleted successfully",

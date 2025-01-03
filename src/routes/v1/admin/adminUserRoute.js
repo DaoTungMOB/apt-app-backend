@@ -5,11 +5,13 @@ const UserValidation = require("../../../validations/userValidation");
 
 const Router = express.Router();
 
+// users/:id
 Router.route("/:id")
   .get(isAuth, isAdmin, AdminUserController.getOne)
   .put(isAuth, isAdmin, UserValidation.updateOne, AdminUserController.updateOne)
-  .delete(isAuth, isAdmin, AdminUserController.delete);
+  .delete(isAuth, isAdmin, AdminUserController.softDelete);
 
+// users
 Router.route("/")
   .post(
     isAuth,

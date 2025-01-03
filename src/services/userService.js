@@ -75,7 +75,7 @@ const UserService = {
     }
   },
 
-  delete: async (id) => {
+  softDelete: async (id) => {
     try {
       const userExist = await UserModel.findOne(id);
       if (!userExist) {

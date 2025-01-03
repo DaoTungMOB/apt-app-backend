@@ -10,138 +10,106 @@ const INVALID_UPDATE_FIELDS = ["_id", "password", "createdAt"];
 
 const UserModel = {
   createNew: async (data) => {
-    try {
-      const fullData = {
-        ...data,
-        role: data.role || ROLE.USER,
-        createdAt: Date.now(),
-        updatedAt: null,
-        deletedAt: null,
-      };
+    const fullData = {
+      ...data,
+      role: data.role || ROLE.USER,
+      createdAt: Date.now(),
+      updatedAt: null,
+      deletedAt: null,
+    };
 
-      return await getDB().collection(USER_COLLECTION_NAME).insertOne(fullData);
-    } catch (error) {
-      throw error;
-    }
+    return await getDB().collection(USER_COLLECTION_NAME).insertOne(fullData);
   },
 
   findAll: async () => {
-    try {
-      const users = await getDB()
-        .collection(USER_COLLECTION_NAME)
-        .find({
-          deletedAt: {
-            $eq: null,
-          },
-        })
-        .toArray();
+    const users = await getDB()
+      .collection(USER_COLLECTION_NAME)
+      .find({
+        deletedAt: {
+          $eq: null,
+        },
+      })
+      .toArray();
 
-      return users;
-    } catch (error) {
-      throw error;
-    }
+    return users;
   },
 
   findAllDeleted: async () => {
-    try {
-      const users = await getDB()
-        .collection(USER_COLLECTION_NAME)
-        .find({
-          deletedAt: {
-            $ne: null,
-          },
-        })
-        .toArray();
+    const users = await getDB()
+      .collection(USER_COLLECTION_NAME)
+      .find({
+        deletedAt: {
+          $ne: null,
+        },
+      })
+      .toArray();
 
-      return users;
-    } catch (error) {
-      throw error;
-    }
+    return users;
   },
 
   findAllWithDeleted: async () => {
-    try {
-      const users = await getDB()
-        .collection(USER_COLLECTION_NAME)
-        .find()
-        .toArray();
+    const users = await getDB()
+      .collection(USER_COLLECTION_NAME)
+      .find()
+      .toArray();
 
-      return users;
-    } catch (error) {
-      throw error;
-    }
+    return users;
   },
 
   findOne: async (id) => {
-    try {
-      const user = await getDB()
-        .collection(USER_COLLECTION_NAME)
-        .findOne({
-          _id: new ObjectId(id),
-        });
+    const user = await getDB()
+      .collection(USER_COLLECTION_NAME)
+      .findOne({
+        _id: new ObjectId(id),
+      });
 
-      return user;
-    } catch (error) {
-      throw error;
-    }
+    return user;
   },
 
   fineOneByEmail: async (email) => {
-    try {
-      const user = await getDB()
-        .collection(USER_COLLECTION_NAME)
-        .findOne({ email: email });
+    const user = await getDB()
+      .collection(USER_COLLECTION_NAME)
+      .findOne({ email: email });
 
-      return user;
-    } catch (error) {
-      throw error;
-    }
+    return user;
   },
 
   update: async (_id, updateData) => {
-    try {
-      INVALID_UPDATE_FIELDS.forEach((field) => {
-        if (updateData.hasOwnProperty(field)) {
-          delete updateData[field];
-        }
-      });
-      if (Object.keys(updateData).length > 0) {
-        updateData.updatedAt = Date.now();
+    INVALID_UPDATE_FIELDS.forEach((field) => {
+      if (updateData.hasOwnProperty(field)) {
+        delete updateData[field];
       }
-
-      const result = await getDB()
-        .collection(USER_COLLECTION_NAME)
-        .findOneAndUpdate(
-          { _id: new ObjectId(_id) },
-          {
-            $set: { ...updateData },
-          },
-          {
-            returnDocument: "after",
-          }
-        );
-
-      if (!result) {
-        throw new ApiError(StatusCodes.NOT_FOUND, "No user found");
-      }
-
-      return result;
-    } catch (error) {
-      throw error;
+    });
+    if (Object.keys(updateData).length > 0) {
+      updateData.updatedAt = Date.now();
     }
+
+    const result = await getDB()
+      .collection(USER_COLLECTION_NAME)
+      .findOneAndUpdate(
+        { _id: new ObjectId(_id) },
+        {
+          $set: { ...updateData },
+        },
+        {
+          returnDocument: "after",
+        }
+      );
+
+    if (!result) {
+      throw new ApiError(StatusCodes.NOT_FOUND, "No user found");
+    }
+
+    return result;
   },
 
   softDelete: async (id) => {
-    try {
-      await getDB()
-        .collection(USER_COLLECTION_NAME)
-        .updateOne(
-          { _id: new ObjectId(id) },
-          { $set: { deletedAt: Date.now() } }
-        );
-    } catch (error) {
-      throw error;
-    }
+    await getDB()
+      .collection(USER_COLLECTION_NAME)
+      .updateOne(
+        { _id: new ObjectId(id) },
+        { $set: { deletedAt: Date.now() } }
+      );
   },
 };
 

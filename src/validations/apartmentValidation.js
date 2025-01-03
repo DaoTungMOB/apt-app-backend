@@ -34,12 +34,38 @@ const AparmentValidation = {
   addUser: async (req, res, next) => {
     try {
       const schema = Joi.object({
-        email: Joi.string().email().required(),
+        userId: Joi.string()
+          .pattern(OBJECT_ID_RULE)
+          .message(OBJECT_ID_RULE_MESSAGE)
+          .required(),
         status: Joi.string()
           .valid(
             ...Object.values([APARTMENT_STATUS.RENTED, APARTMENT_STATUS.SOLD])
           )
           .required(),
+      });
+
+      await schema.validateAsync(req.body, { abortEarly: false });
+
+      next();
+    } catch (error) {
+      next(new ApiError(StatusCodes.UNPROCESSABLE_ENTITY, error.message));
+    }
+  },
+
+  update: async (req, res, next) => {
+    try {
+      const schema = Joi.object({
+        userId: Joi.string()
+          .pattern(OBJECT_ID_RULE)
+          .message(OBJECT_ID_RULE_MESSAGE),
+        code: Joi.string(),
+        thumbnail: Joi.string(),
+        floorNumber: Joi.number(),
+        area: Joi.number(),
+        rentPrice: Joi.number(),
+        sellPrice: Joi.number(),
+        status: Joi.string().valid(...Object.values(APARTMENT_STATUS)),
       });
 
       await schema.validateAsync(req.body, { abortEarly: false });

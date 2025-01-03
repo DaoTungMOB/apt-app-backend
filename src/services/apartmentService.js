@@ -39,8 +39,8 @@ const ApartmentService = {
     return createdApartment;
   },
 
-  addUser: async (apartmentId, userEmail, status) => {
-    const userExist = await UserModel.fineOneByEmail(userEmail);
+  addUser: async (apartmentId, userId, status) => {
+    const userExist = await UserModel.findOne(userId);
     if (!userExist) {
       throw new ApiError(StatusCodes.NOT_FOUND, "No user found");
     }

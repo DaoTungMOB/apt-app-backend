@@ -15,8 +15,8 @@ const AdminApartmentController = {
   addUser: async (req, res, next) => {
     try {
       const { id } = req.params;
-      const { email: userEmail, status } = req.body;
-      const apartment = await ApartmentService.addUser(id, userEmail, status);
+      const { userId, status } = req.body;
+      const apartment = await ApartmentService.addUser(id, userId, status);
 
       return res.status(StatusCodes.OK).json(apartment);
     } catch (error) {
@@ -40,6 +40,17 @@ const AdminApartmentController = {
       const apartments = await ApartmentService.getAll();
 
       return res.status(StatusCodes.OK).json(apartments);
+    } catch (error) {
+      next(error);
+    }
+  },
+
+  update: async (req, res, next) => {
+    try {
+      const { id } = req.params;
+      const updatedApartment = await ApartmentService.update(id, req.body);
+
+      return res.status(StatusCodes.OK).json(updatedApartment);
     } catch (error) {
       next(error);
     }

@@ -38,7 +38,10 @@ const AuthValidation = {
     });
 
     try {
-      await schema.validateAsync(req.body, { abortEarly: false });
+      await schema.validateAsync(req.body, {
+        abortEarly: false,
+        allowUnknown: false,
+      });
 
       next();
     } catch (error) {

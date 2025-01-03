@@ -4,7 +4,7 @@ const UserService = require("./userService");
 const bcrypt = require("bcryptjs");
 const { env } = require("../config/environment");
 const UserModel = require("../models/userModel");
-const { generateToken, verifyToken } = require("../utils/auth");
+const { generateToken, verifyToken, ROLE } = require("../utils/auth");
 
 const accessTokenLife = "86400000";
 const refreshTokenLife = "2592000000";
@@ -14,6 +14,7 @@ const AuthService = {
     try {
       const newUser = {
         ...reqBody,
+        role: ROLE.USER,
       };
 
       const existUser = await UserModel.fineOneByEmail(newUser?.email);

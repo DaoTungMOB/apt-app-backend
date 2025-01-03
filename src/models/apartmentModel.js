@@ -11,124 +11,96 @@ const INVALID_UPDATE_FIELDS = ["_id", "createdAt"];
 
 const ApartmentModel = {
   createNew: async (data) => {
-    try {
-      const fullData = {
-        ...data,
-        status: data.status || UNAVAILABLE_STATUS,
-        createdAt: Date.now(),
-        updatedAt: null,
-        deletedAt: null,
-      };
+    const fullData = {
+      ...data,
+      status: data.status || UNAVAILABLE_STATUS,
+      createdAt: Date.now(),
+      updatedAt: null,
+      deletedAt: null,
+    };
 
-      return await getDB()
-        .collection(APARTMENT_COLLECTION_NAME)
-        .insertOne(fullData);
-    } catch (error) {
-      throw error;
-    }
+    return await getDB()
+      .collection(APARTMENT_COLLECTION_NAME)
+      .insertOne(fullData);
   },
 
   findAll: async () => {
-    try {
-      const apartments = await getDB()
-        .collection(APARTMENT_COLLECTION_NAME)
-        .find({
-          deletedAt: {
-            $eq: null,
-          },
-        })
-        .toArray();
+    const apartments = await getDB()
+      .collection(APARTMENT_COLLECTION_NAME)
+      .find({
+        deletedAt: {
+          $eq: null,
+        },
+      })
+      .toArray();
 
-      return apartments;
-    } catch (error) {
-      throw error;
-    }
+    return apartments;
   },
 
   findAllDeleted: async () => {
-    try {
-      const apartments = await getDB()
-        .collection(APARTMENT_COLLECTION_NAME)
-        .find({
-          deletedAt: {
-            $ne: null,
-          },
-        })
-        .toArray();
+    const apartments = await getDB()
+      .collection(APARTMENT_COLLECTION_NAME)
+      .find({
+        deletedAt: {
+          $ne: null,
+        },
+      })
+      .toArray();
 
-      return apartments;
-    } catch (error) {
-      throw error;
-    }
+    return apartments;
   },
 
   findAllWithDeleted: async () => {
-    try {
-      const apartments = await getDB()
-        .collection(APARTMENT_COLLECTION_NAME)
-        .find()
-        .toArray();
+    const apartments = await getDB()
+      .collection(APARTMENT_COLLECTION_NAME)
+      .find()
+      .toArray();
 
-      return apartments;
-    } catch (error) {
-      throw error;
-    }
+    return apartments;
   },
 
   findOne: async (id) => {
-    try {
-      const apartment = await getDB()
-        .collection(APARTMENT_COLLECTION_NAME)
-        .findOne({
-          _id: new ObjectId(id),
-        });
+    const apartment = await getDB()
+      .collection(APARTMENT_COLLECTION_NAME)
+      .findOne({
+        _id: new ObjectId(id),
+      });
 
-      return apartment;
-    } catch (error) {
-      throw error;
-    }
+    return apartment;
   },
 
   update: async (_id, updateData) => {
-    try {
-      INVALID_UPDATE_FIELDS.forEach((field) => {
-        if (updateData.hasOwnProperty(field)) {
-          delete updateData[field];
-        }
-      });
-      if (Object.keys(updateData).length > 0) {
-        updateData.updatedAt = Date.now();
+    INVALID_UPDATE_FIELDS.forEach((field) => {
+      if (updateData.hasOwnProperty(field)) {
+        delete updateData[field];
       }
-
-      const result = await getDB()
-        .collection(APARTMENT_COLLECTION_NAME)
-        .findOneAndUpdate(
-          { _id: new ObjectId(_id) },
-          {
-            $set: { ...updateData },
-          },
-          {
-            returnDocument: "after",
-          }
-        );
-
-      return result;
-    } catch (error) {
-      throw error;
+    });
+    if (Object.keys(updateData).length > 0) {
+      updateData.updatedAt = Date.now();
     }
+
+    const result = await getDB()
+      .collection(APARTMENT_COLLECTION_NAME)
+      .findOneAndUpdate(
+        { _id: new ObjectId(_id) },
+        {
+          $set: { ...updateData },
+        },
+        {
+          returnDocument: "after",
+        }
+      );
+
+    return result;
   },
 
   softDelete: async (id) => {
-    try {
-      await getDB()
-        .collection(APARTMENT_COLLECTION_NAME)
-        .updateOne(
-          { _id: new ObjectId(id) },
-          { $set: { deletedAt: Date.now() } }
-        );
-    } catch (error) {
-      throw error;
-    }
+    await getDB()
+      .collection(APARTMENT_COLLECTION_NAME)
+      .updateOne(
+        { _id: new ObjectId(id) },
+        { $set: { deletedAt: Date.now() } }
+      );
   },
 };
 

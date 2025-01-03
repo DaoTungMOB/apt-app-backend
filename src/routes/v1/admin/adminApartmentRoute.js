@@ -14,7 +14,9 @@ Router.route("/:id/users").post(
 );
 
 // /apartments/:apartmentId
-Router.route("/:id").get(isAuth, isAdmin, ApartmentController.getOne);
+Router.route("/:id")
+  .get(isAuth, isAdmin, ApartmentController.getOne)
+  .put(isAuth, isAdmin, AparmentValidation.update, ApartmentController.update);
 
 // /apartments
 Router.route("/")

@@ -23,7 +23,10 @@ const AparmentValidation = {
         status: Joi.string().valid(...Object.values(APARTMENT_STATUS)),
       });
 
-      await schema.validateAsync(req.body, { abortEarly: false });
+      await schema.validateAsync(req.body, {
+        abortEarly: false,
+        convert: false,
+      });
 
       next();
     } catch (error) {
@@ -56,19 +59,18 @@ const AparmentValidation = {
   update: async (req, res, next) => {
     try {
       const schema = Joi.object({
-        userId: Joi.string()
-          .pattern(OBJECT_ID_RULE)
-          .message(OBJECT_ID_RULE_MESSAGE),
         code: Joi.string(),
         thumbnail: Joi.string(),
         floorNumber: Joi.number(),
         area: Joi.number(),
         rentPrice: Joi.number(),
         sellPrice: Joi.number(),
-        status: Joi.string().valid(...Object.values(APARTMENT_STATUS)),
       });
 
-      await schema.validateAsync(req.body, { abortEarly: false });
+      await schema.validateAsync(req.body, {
+        abortEarly: false,
+        convert: false,
+      });
 
       next();
     } catch (error) {

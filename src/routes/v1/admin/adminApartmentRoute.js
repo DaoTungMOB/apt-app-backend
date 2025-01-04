@@ -2,8 +2,17 @@ const express = require("express");
 const { isAuth, isAdmin } = require("../../../middlewares/auth");
 const ApartmentController = require("../../../controllers/admin/adminApartmentController");
 const AparmentValidation = require("../../../validations/apartmentValidation");
+const AdminApartmentUtilityController = require("../../../controllers/admin/adminApartmentUtilityController");
 
 const Router = express.Router();
+
+// /apartments/:apartmentId/utilities
+Router.route("/:id/utilities").post(
+  isAuth,
+  isAdmin,
+  AparmentValidation.addUtility,
+  AdminApartmentUtilityController.createNew
+);
 
 // /apartments/:apartmentId/status
 Router.route("/:id/status").put(

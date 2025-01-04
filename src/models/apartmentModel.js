@@ -27,11 +27,22 @@ const ApartmentModel = {
   findAll: async () => {
     const apartments = await getDB()
       .collection(APARTMENT_COLLECTION_NAME)
-      .find({
-        deletedAt: {
-          $eq: null,
+      .aggregate([
+        {
+          $lookup: {
+            from: "users",
+            localField: "userId",
+            foreignField: "_id",
+            as: "userProfile",
+          },
         },
-      })
+        {
+          $unwind: {
+            path: "$userProfile",
+            preserveNullAndEmptyArrays: true,
+          },
+        },
+      ])
       .toArray();
 
     return apartments;

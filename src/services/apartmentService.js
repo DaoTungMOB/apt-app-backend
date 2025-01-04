@@ -64,6 +64,33 @@ const ApartmentService = {
     return updatedApartment;
   },
 
+  changeUser: async (apartmentId, userId) => {
+    const userExist = await UserModel.findOne(userId);
+    if (!userExist) {
+      throw new ApiError(StatusCodes.NOT_FOUND, "No user found");
+    }
+
+    const apartmentExist = await ApartmentModel.findOne(apartmentId);
+    if (
+      apartmentExist.status !== APARTMENT_STATUS.RENTED &&
+      apartmentExist.status !== APARTMENT_STATUS.SOLD
+    ) {
+      throw new ApiError(
+        StatusCodes.BAD_REQUEST,
+        "Aparment is not rented or sold"
+      );
+    }
+
+    const updatedApartment = await ApartmentModel.update(apartmentId, {
+      userId: userExist._id,
+    });
+    if (!updatedApartment) {
+      throw new ApiError(StatusCodes.NOT_FOUND, "No apartment found");
+    }
+
+    return updatedApartment;
+  },
+
   getAll: async () => {
     const apartments = await ApartmentModel.findAll();
     if (!apartments) {

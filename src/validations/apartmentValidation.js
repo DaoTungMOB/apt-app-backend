@@ -56,6 +56,23 @@ const AparmentValidation = {
     }
   },
 
+  changeUser: async (req, res, next) => {
+    try {
+      const schema = Joi.object({
+        userId: Joi.string()
+          .pattern(OBJECT_ID_RULE)
+          .message(OBJECT_ID_RULE_MESSAGE)
+          .required(),
+      });
+
+      await schema.validateAsync(req.body, { abortEarly: false });
+
+      next();
+    } catch (error) {
+      next(new ApiError(StatusCodes.UNPROCESSABLE_ENTITY, error.message));
+    }
+  },
+
   update: async (req, res, next) => {
     try {
       const schema = Joi.object({

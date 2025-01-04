@@ -6,12 +6,19 @@ const AparmentValidation = require("../../../validations/apartmentValidation");
 const Router = express.Router();
 
 // /apartments/:apartmentId/users
-Router.route("/:id/users").post(
-  isAuth,
-  isAdmin,
-  AparmentValidation.addUser,
-  ApartmentController.addUser
-);
+Router.route("/:id/users")
+  .post(
+    isAuth,
+    isAdmin,
+    AparmentValidation.addUser,
+    ApartmentController.addUser
+  )
+  .put(
+    isAuth,
+    isAdmin,
+    AparmentValidation.changeUser,
+    ApartmentController.changeUser
+  );
 
 // /apartments/:apartmentId
 Router.route("/:id")

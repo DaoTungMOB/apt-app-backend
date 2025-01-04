@@ -11,7 +11,7 @@ Router.route("/:id/utilities").post(
   isAuth,
   isAdmin,
   AparmentValidation.addUtility,
-  AdminApartmentUtilityController.createNew
+  AdminApartmentUtilityController.addUtility
 );
 
 // /apartments/:apartmentId/status

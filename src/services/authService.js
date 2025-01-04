@@ -89,6 +89,7 @@ const AuthService = {
         accessToken,
         expiresIn: parseInt(accessTokenLife),
         refreshToken,
+        role: existUser.role,
       };
     } catch (error) {
       throw error;
@@ -106,7 +107,7 @@ const AuthService = {
         env.REFRESH_SERCET_KEY
       );
 
-      if (!verifyRefreshToken) {
+      if (!verifyRefreshToken || typeof verifyRefreshToken === "string") {
         throw new ApiError(StatusCodes.UNAUTHORIZED, "Token không hợp lệ");
       }
 
@@ -119,8 +120,6 @@ const AuthService = {
         {
           email: existUser.email,
           role: existUser.role,
-          firstName: existUser.firstName,
-          lastName: existUser.lastName,
         },
         env.ACCESS_SECRET_KEY,
         accessTokenLife

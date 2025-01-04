@@ -4,13 +4,11 @@ const AdminUtilityController = require("../../../controllers/admin/adminUtilityC
 const UtilityValidation = require("../../../validations/utilityValidation");
 const Router = express.Router();
 
-Router.route("/")
-  .post(
-    isAuth,
-    isAdmin,
-    UtilityValidation.createNew,
-    AdminUtilityController.createNew
-  )
-  // .get(isAuth, isAdmin);
+Router.route("/:id").put(
+  isAuth,
+  isAdmin,
+  UtilityValidation.update,
+  AdminUtilityController.update
+);
 
 module.exports = Router;

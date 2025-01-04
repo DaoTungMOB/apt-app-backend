@@ -2,9 +2,10 @@ const { StatusCodes } = require("http-status-codes");
 const UtilityService = require("../../services/utilityService");
 
 const AdminUtilityController = {
-  createNew: async (req, res, next) => {
+  update: async (req, res, next) => {
     try {
-      const result = await UtilityService.createNew(req.body);
+      const { id } = req.params;
+      const result = await UtilityService.update(id, req.body);
 
       return res.status(StatusCodes.CREATED).json(result);
     } catch (error) {

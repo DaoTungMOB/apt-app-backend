@@ -7,16 +7,19 @@ const {
 } = require("../utils/validators");
 
 const UtilityValidation = {
-  createNew: async (req, res, next) => {
+  update: async (req, res, next) => {
     try {
       const schema = Joi.object({
-        title: Joi.string().required(),
-        description: Joi.string().required(),
-        price: Joi.number().required(),
+        title: Joi.string(),
+        description: Joi.string(),
+        price: Joi.number(),
         unit: Joi.string(),
       });
 
-      await schema.validateAsync(req.body, { abortEarly: false });
+      await schema.validateAsync(req.body, {
+        abortEarly: false,
+        convert: false,
+      });
 
       next();
     } catch (error) {

@@ -1,14 +1,10 @@
 const UtilityModel = require("../models/utilityModel");
 
 const UtilityService = {
-  createNew: async (reqBody) => {
-    const newUtility = {
-      ...reqBody,
-    };
+  update: async (id, reqBody) => {
+    const updatedApartment = await UtilityModel.update(id, reqBody);
 
-    const createdApartment = await UtilityModel.createNew(newUtility);
-
-    return createdApartment;
+    return updatedApartment;
   },
 };
 

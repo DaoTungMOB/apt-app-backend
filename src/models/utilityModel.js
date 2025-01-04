@@ -1,12 +1,17 @@
 const { ObjectId } = require("mongodb");
 const { getDB } = require("../config/mongodb");
+const ApiError = require("../utils/ApiError");
+const { StatusCodes } = require("http-status-codes");
 
 const UTILITY_COLLECTION_NAME = "utilities";
+
+const INVALID_UPDATE_FIELDS = ["_id", "createdAt"];
 
 const UtilityModel = {
   createNew: async (data) => {
     const fullData = {
       ...data,
+      apartmentId: new ObjectId(data.apartmentId),
       createdAt: Date.now(),
       updatedAt: null,
       deletedAt: null,
@@ -23,7 +28,7 @@ const UtilityModel = {
       .findOne({ _id: new ObjectId(id) });
   },
 
-  update: async () => {
+  update: async (id, updateData) => {
     INVALID_UPDATE_FIELDS.forEach((field) => {
       if (updateData.hasOwnProperty(field)) {
         delete updateData[field];
@@ -34,9 +39,9 @@ const UtilityModel = {
     }
 
     const result = await getDB()
-      .collection(APARTMENT_COLLECTION_NAME)
+      .collection(UTILITY_COLLECTION_NAME)
       .findOneAndUpdate(
-        { _id: new ObjectId(_id) },
+        { _id: new ObjectId(id) },
         {
           $set: { ...updateData },
         },
@@ -45,16 +50,12 @@ const UtilityModel = {
         }
       );
 
-    if (!result) {
-      throw new ApiError(StatusCodes.NOT_FOUND, "No utility found");
-    }
-
     return result;
   },
 
-  softDelete: async () => {
+  softDelete: async (id) => {
     await getDB()
-      .collection(APARTMENT_COLLECTION_NAME)
+      .collection(UTILITY_COLLECTION_NAME)
       .updateOne(
         { _id: new ObjectId(id) },
         { $set: { deletedAt: Date.now() } }

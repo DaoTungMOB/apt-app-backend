@@ -89,7 +89,7 @@ const AuthService = {
         accessToken,
         expiresIn: parseInt(accessTokenLife),
         refreshToken,
-        role: existUser.role,
+        userProlile: existUser,
       };
     } catch (error) {
       throw error;

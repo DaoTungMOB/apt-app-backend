@@ -65,12 +65,16 @@ const ApartmentService = {
   },
 
   changeUser: async (apartmentId, userId) => {
+    const apartmentExist = await ApartmentModel.findOne(apartmentId);
+    if (!apartmentExist) {
+      throw new ApiError(StatusCodes.NOT_FOUND, "No apartment found");
+    }
+
     const userExist = await UserModel.findOne(userId);
     if (!userExist) {
       throw new ApiError(StatusCodes.NOT_FOUND, "No user found");
     }
 
-    const apartmentExist = await ApartmentModel.findOne(apartmentId);
     if (
       apartmentExist.status !== APARTMENT_STATUS.RENTED &&
       apartmentExist.status !== APARTMENT_STATUS.SOLD
@@ -84,10 +88,41 @@ const ApartmentService = {
     const updatedApartment = await ApartmentModel.update(apartmentId, {
       userId: userExist._id,
     });
-    if (!updatedApartment) {
+
+    return updatedApartment;
+  },
+
+  changeStatus: async (apartmentId, reqBody) => {
+    const existApt = await ApartmentModel.findOne(apartmentId);
+    if (!existApt) {
       throw new ApiError(StatusCodes.NOT_FOUND, "No apartment found");
     }
 
+    let updatedApartment;
+
+    // Nếu status là rented hoặc sold thì kiểm tra user
+    if (
+      reqBody.status === APARTMENT_STATUS.RENTED ||
+      reqBody.status === APARTMENT_STATUS.SOLD
+    ) {
+      const userExist = await UserModel.findOne(reqBody.userId);
+      if (!userExist) {
+        throw new ApiError(StatusCodes.NOT_FOUND, "No user found");
+      }
+
+      updatedApartment = await ApartmentModel.update(apartmentId, {
+        userId: userExist._id,
+        status: reqBody.status,
+      });
+    } else {
+      updatedApartment = await ApartmentModel.update(
+        apartmentId,
+        {
+          status: reqBody.status,
+        },
+        { userId: null }
+      );
+    }
     return updatedApartment;
   },
 

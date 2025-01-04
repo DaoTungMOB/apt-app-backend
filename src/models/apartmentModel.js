@@ -69,7 +69,7 @@ const ApartmentModel = {
     return apartment;
   },
 
-  update: async (_id, updateData) => {
+  update: async (_id, updateData, unsetData) => {
     INVALID_UPDATE_FIELDS.forEach((field) => {
       if (updateData.hasOwnProperty(field)) {
         delete updateData[field];
@@ -79,17 +79,21 @@ const ApartmentModel = {
       updateData.updatedAt = Date.now();
     }
 
+    let updateCommand = {
+      $set: { ...updateData },
+    };
+    if (unsetData) {
+      updateCommand = {
+        ...updateCommand,
+        $unset: { ...unsetData },
+      };
+    }
+
     const result = await getDB()
       .collection(APARTMENT_COLLECTION_NAME)
-      .findOneAndUpdate(
-        { _id: new ObjectId(_id) },
-        {
-          $set: { ...updateData },
-        },
-        {
-          returnDocument: "after",
-        }
-      );
+      .findOneAndUpdate({ _id: new ObjectId(_id) }, updateCommand, {
+        returnDocument: "after",
+      });
 
     return result;
   },

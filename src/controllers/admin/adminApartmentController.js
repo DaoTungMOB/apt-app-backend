@@ -36,6 +36,17 @@ const AdminApartmentController = {
     }
   },
 
+  changeStatus: async (req, res, next) => {
+    try {
+      const { id } = req.params;
+      const apartment = await ApartmentService.changeStatus(id, req.body);
+
+      return res.status(StatusCodes.OK).json(apartment);
+    } catch (error) {
+      next(error);
+    }
+  },
+
   getOne: async (req, res, next) => {
     try {
       const { id } = req.params;

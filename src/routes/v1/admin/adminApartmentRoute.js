@@ -3,6 +3,7 @@ const { isAuth, isAdmin } = require("../../../middlewares/auth");
 const ApartmentController = require("../../../controllers/admin/adminApartmentController");
 const AparmentValidation = require("../../../validations/apartmentValidation");
 const AdminApartmentUtilityController = require("../../../controllers/admin/adminApartmentUtilityController");
+const UtilityValidation = require("../../../validations/utilityValidation");
 
 const Router = express.Router();
 
@@ -10,7 +11,7 @@ const Router = express.Router();
 Router.route("/:id/utilities").post(
   isAuth,
   isAdmin,
-  AparmentValidation.addUtility,
+  UtilityValidation.add,
   AdminApartmentUtilityController.addUtility
 );
 

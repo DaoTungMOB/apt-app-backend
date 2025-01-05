@@ -6,14 +6,18 @@ const {
   OBJECT_ID_RULE_MESSAGE,
 } = require("../utils/validators");
 
-const UtilityValidation = {
-  add: async (req, res, next) => {
+const InvoiceValidation = {
+  create: async (req, res, next) => {
     try {
       const schema = Joi.object({
         title: Joi.string().required(),
-        description: Joi.string().required(),
-        price: Joi.number().required(),
-        unit: Joi.string().required(),
+        previousReading: Joi.number().min(1),
+        currentReading: Joi.number().min(1),
+        quantity: Joi.number().required().min(1),
+        month: Joi.number().required().min(1).max(12),
+        year: Joi.number().required().min(2000),
+        activatedAt: Joi.date().timestamp("javascript"),
+        status: Joi.boolean(),
       });
 
       await schema.validateAsync(req.body, {
@@ -31,9 +35,14 @@ const UtilityValidation = {
     try {
       const schema = Joi.object({
         title: Joi.string(),
-        description: Joi.string(),
-        price: Joi.number(),
-        unit: Joi.string(),
+        previousReading: Joi.number().min(1),
+        currentReading: Joi.number().min(1),
+        quantity: Joi.number().min(1),
+        unitPrice: Joi.number().min(1),
+        month: Joi.number().min(1).max(12),
+        year: Joi.number().min(2000),
+        activatedAt: Joi.date().timestamp("javascript"),
+        status: Joi.boolean(),
       });
 
       await schema.validateAsync(req.body, {
@@ -48,4 +57,4 @@ const UtilityValidation = {
   },
 };
 
-module.exports = UtilityValidation;
+module.exports = InvoiceValidation;

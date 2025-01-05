@@ -34,26 +34,6 @@ const AparmentValidation = {
     }
   },
 
-  addUtility: async (req, res, next) => {
-    try {
-      const schema = Joi.object({
-        title: Joi.string().required(),
-        description: Joi.string().required(),
-        price: Joi.number().required(),
-        unit: Joi.string(),
-      });
-
-      await schema.validateAsync(req.body, {
-        abortEarly: false,
-        convert: false,
-      });
-
-      next();
-    } catch (error) {
-      next(new ApiError(StatusCodes.UNPROCESSABLE_ENTITY, error.message));
-    }
-  },
-
   addUser: async (req, res, next) => {
     try {
       const schema = Joi.object({

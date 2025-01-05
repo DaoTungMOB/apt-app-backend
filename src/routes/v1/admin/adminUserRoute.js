@@ -5,6 +5,13 @@ const UserValidation = require("../../../validations/userValidation");
 
 const Router = express.Router();
 
+// users/:id/apartments
+Router.route("/:id/apartments").get(
+  isAuth,
+  isAdmin,
+  AdminUserController.getApts
+);
+
 // users/:id
 Router.route("/:id")
   .get(isAuth, isAdmin, AdminUserController.getOne)

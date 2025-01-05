@@ -135,6 +135,12 @@ const ApartmentService = {
     return apartments;
   },
 
+  getUserApts: async (userId) => {
+    const apts = await ApartmentModel.findByUserId(userId);
+
+    return apts;
+  },
+
   getById: async (id) => {
     const apartment = await ApartmentModel.findOne(id);
     if (!apartment) {

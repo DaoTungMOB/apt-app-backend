@@ -48,6 +48,17 @@ const ApartmentModel = {
     return apartments;
   },
 
+  findByUserId: async (userId) => {
+    const apartments = await getDB()
+      .collection(APARTMENT_COLLECTION_NAME)
+      .find({
+        userId: new ObjectId(userId),
+      })
+      .toArray();
+
+    return apartments;
+  },
+
   findAllDeleted: async () => {
     const apartments = await getDB()
       .collection(APARTMENT_COLLECTION_NAME)

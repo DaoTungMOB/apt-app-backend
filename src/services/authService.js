@@ -54,7 +54,7 @@ const AuthService = {
 
       const accessToken = generateToken(
         {
-          email,
+          userId: existUser._id,
           role: existUser.role,
           firstName: existUser.firstName,
           lastName: existUser.lastName,
@@ -72,7 +72,7 @@ const AuthService = {
 
       const refreshToken = generateToken(
         {
-          email,
+          userId: existUser._id,
         },
         env.REFRESH_SERCET_KEY,
         refreshTokenLife
@@ -118,8 +118,10 @@ const AuthService = {
       // Tạo mã
       const newAccessToken = generateToken(
         {
-          email: existUser.email,
+          userId: existUser._id,
           role: existUser.role,
+          firstName: existUser.firstName,
+          lastName: existUser.lastName,
         },
         env.ACCESS_SECRET_KEY,
         accessTokenLife
@@ -134,7 +136,7 @@ const AuthService = {
 
       const newRefreshToken = generateToken(
         {
-          email: existUser.email,
+          userId: existUser._id,
         },
         env.REFRESH_SERCET_KEY,
         refreshTokenLife

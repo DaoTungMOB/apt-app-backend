@@ -77,6 +77,32 @@ const UserValidation = {
       next(new ApiError(StatusCodes.UNPROCESSABLE_ENTITY, error.message));
     }
   },
+
+  updateProfile: async (req, res, next) => {
+    const schema = Joi.object({
+      cccd: Joi.string().pattern(CCCD_RULE).messages({
+        "string.pattern.base": CCCD_MESSAGE,
+      }),
+      birthDay: Joi.date(),
+      phone: Joi.string().pattern(PHONE_RULE).messages({
+        "string.pattern.base": PHONE_MESSAGE,
+      }),
+      firstName: Joi.string()
+        .pattern(ONLY_UNICODE_RULE)
+        .message(ONLY_UNICODE_MESSAGE),
+      lastName: Joi.string()
+        .pattern(ONLY_UNICODE_RULE)
+        .message(ONLY_UNICODE_MESSAGE),
+    });
+
+    try {
+      await schema.validateAsync(req.body, { abortEarly: false });
+
+      next();
+    } catch (error) {
+      next(new ApiError(StatusCodes.UNPROCESSABLE_ENTITY, error.message));
+    }
+  },
 };
 
 module.exports = UserValidation;

@@ -13,6 +13,18 @@ const AdminInvoiceController = {
       next(error);
     }
   },
+
+  update: async (req, res, next) => {
+    try {
+      const { id } = req.params;
+
+      const result = await InvoiceService.update(id, req.body);
+
+      return res.status(StatusCodes.CREATED).json(result);
+    } catch (error) {
+      next(error);
+    }
+  },
 };
 
 module.exports = AdminInvoiceController;

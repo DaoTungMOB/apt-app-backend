@@ -16,6 +16,7 @@ const AparmentValidation = {
           .message(OBJECT_ID_RULE_MESSAGE),
         code: Joi.string().required(),
         thumbnail: Joi.string(),
+        imageUrls: Joi.array(),
         floorNumber: Joi.number().required(),
         area: Joi.number().required(),
         rentPrice: Joi.number().required(),

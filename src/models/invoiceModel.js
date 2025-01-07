@@ -32,6 +32,17 @@ const InvoiceModel = {
       });
   },
 
+  getPaidWithYearAndMonth: async (utilityId, year, month) => {
+    return await getDB()
+      .collection(INVOICE_COLLECTION_NAME)
+      .findOne({
+        utilityId: new ObjectId(utilityId),
+        year,
+        month,
+        status: true,
+      });
+  },
+
   getOne: async (invoiceId) => {
     return await getDB()
       .collection(INVOICE_COLLECTION_NAME)

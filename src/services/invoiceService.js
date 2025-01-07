@@ -47,6 +47,19 @@ const InvoiceService = {
     return newInvoice;
   },
 
+  getWithYearAndMonth: async (utilityId, year, month) => {
+    const invoice = await InvoiceModel.getWithYearAndMonth(
+      utilityId,
+      year,
+      month
+    );
+    if (!invoice) {
+      throw new ApiError(StatusCodes.NOT_FOUND, "No invoice found");
+    }
+
+    return invoice;
+  },
+
   update: async (invoiceId, reqBody) => {
     const invoiceExist = await InvoiceModel.getOne(invoiceId);
     if (!invoiceExist) {

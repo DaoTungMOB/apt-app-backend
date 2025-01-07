@@ -4,8 +4,6 @@ const UserRoute = require("./userRoute");
 const ApartmentRoute = require("./apartmentRoute");
 const AuthRoute = require("./authRoute");
 const AdminRoute = require("./admin");
-const utc = require("dayjs/plugin/utc");
-const dayjs = require("dayjs");
 
 const Router = express.Router();
 
@@ -18,10 +16,10 @@ Router.get("/status", (req, res) => {
 
 Router.use("/auth", AuthRoute);
 
+Router.use("/admin", AdminRoute);
+
 Router.use("/users", UserRoute);
 
 Router.use("/apartments", ApartmentRoute);
-
-Router.use("/admin", AdminRoute);
 
 module.exports = Router;

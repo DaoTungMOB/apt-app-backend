@@ -15,17 +15,6 @@ const UserController = {
     }
   },
 
-  getUserApts: async (req, res, next) => {
-    try {
-      const userId = req.payload.userId;
-      const result = await ApartmentService.getUserApts(userId);
-
-      return res.status(StatusCodes.OK).json(result);
-    } catch (error) {
-      next(error);
-    }
-  },
-
   updateProfile: async (req, res, next) => {
     try {
       const userId = req.payload.userId;

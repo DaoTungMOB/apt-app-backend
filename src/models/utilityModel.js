@@ -28,6 +28,18 @@ const UtilityModel = {
       .findOne({ _id: new ObjectId(id) });
   },
 
+  findAptUtilities: async (apartmentId) => {
+    const utilities = await getDB()
+      .collection(UTILITY_COLLECTION_NAME)
+      .find({
+        apartmentId: new ObjectId(apartmentId),
+        deletedAt: null,
+      })
+      .toArray();
+
+    return utilities;
+  },
+
   update: async (id, updateData) => {
     INVALID_UPDATE_FIELDS.forEach((field) => {
       if (updateData.hasOwnProperty(field)) {

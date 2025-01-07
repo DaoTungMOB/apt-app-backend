@@ -1,6 +1,6 @@
 const express = require("express");
 const { isAuth, isAdmin } = require("../../../middlewares/auth");
-const ApartmentController = require("../../../controllers/admin/adminApartmentController");
+const AdminApartmentController = require("../../../controllers/admin/adminApartmentController");
 const AparmentValidation = require("../../../validations/apartmentValidation");
 const AdminApartmentUtilityController = require("../../../controllers/admin/adminApartmentUtilityController");
 const UtilityValidation = require("../../../validations/utilityValidation");
@@ -20,7 +20,7 @@ Router.route("/:id/status").put(
   isAuth,
   isAdmin,
   AparmentValidation.changeStatus,
-  ApartmentController.changeStatus
+  AdminApartmentController.changeStatus
 );
 
 // /apartments/:apartmentId/users
@@ -29,19 +29,24 @@ Router.route("/:id/users")
     isAuth,
     isAdmin,
     AparmentValidation.addUser,
-    ApartmentController.addUser
+    AdminApartmentController.addUser
   )
   .put(
     isAuth,
     isAdmin,
     AparmentValidation.changeUser,
-    ApartmentController.changeUser
+    AdminApartmentController.changeUser
   );
 
 // /apartments/:apartmentId
 Router.route("/:id")
-  .get(isAuth, isAdmin, ApartmentController.getOne)
-  .put(isAuth, isAdmin, AparmentValidation.update, ApartmentController.update);
+  .get(isAuth, isAdmin, AdminApartmentController.getAptWithUser)
+  .put(
+    isAuth,
+    isAdmin,
+    AparmentValidation.update,
+    AdminApartmentController.update
+  );
 
 // /apartments
 Router.route("/")
@@ -49,8 +54,8 @@ Router.route("/")
     isAuth,
     isAdmin,
     AparmentValidation.createNew,
-    ApartmentController.createNew
+    AdminApartmentController.createNew
   )
-  .get(isAuth, isAdmin, ApartmentController.getAll);
+  .get(isAuth, isAdmin, AdminApartmentController.getAll);
 
 module.exports = Router;

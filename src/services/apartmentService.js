@@ -153,6 +153,19 @@ const ApartmentService = {
     return apartment;
   },
 
+  getAptWithUser: async (apartmentId) => {
+    const apartment = await ApartmentModel.findOne(apartmentId);
+    if (!apartment) {
+      throw new ApiError(StatusCodes.NOT_FOUND, "No apartment found");
+    }
+    const user = await UserModel.findOne(apartment.userId);
+    if (user) {
+      apartment.userProfile = user;
+    }
+
+    return apartment;
+  },
+
   update: async (id, reqBody) => {
     const updatedApartment = await ApartmentModel.update(id, reqBody);
 

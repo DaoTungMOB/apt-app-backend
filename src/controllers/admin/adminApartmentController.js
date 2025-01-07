@@ -1,5 +1,6 @@
 const { StatusCodes } = require("http-status-codes");
 const ApartmentService = require("../../services/apartmentService");
+const UserService = require("../../services/userService");
 
 const AdminApartmentController = {
   createNew: async (req, res, next) => {
@@ -51,6 +52,17 @@ const AdminApartmentController = {
     try {
       const { id } = req.params;
       const apartment = await ApartmentService.getById(id);
+
+      return res.status(StatusCodes.OK).json(apartment);
+    } catch (error) {
+      next(error);
+    }
+  },
+
+  getAptWithUser: async (req, res, next) => {
+    try {
+      const { id } = req.params;
+      const apartment = await ApartmentService.getAptWithUser(id);
 
       return res.status(StatusCodes.OK).json(apartment);
     } catch (error) {

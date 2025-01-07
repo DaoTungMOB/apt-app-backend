@@ -21,6 +21,7 @@ const AparmentValidation = {
         area: Joi.number().required(),
         rentPrice: Joi.number().required(),
         sellPrice: Joi.number().required(),
+        startOfTenancy: Joi.date().timestamp("javascript"),
         status: Joi.string().valid(...Object.values(APARTMENT_STATUS)),
       });
 

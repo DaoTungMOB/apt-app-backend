@@ -3,6 +3,7 @@ const ApartmentModel = require("../models/apartmentModel");
 const UserModel = require("../models/userModel");
 const { update } = require("./userService");
 const ApiError = require("../utils/ApiError");
+const dayjs = require("dayjs");
 
 const APARTMENT_STATUS = {
   UNAVAILABLE: "unavailable",
@@ -136,6 +137,22 @@ const ApartmentService = {
     }
 
     return apartments;
+  },
+
+  getMonthlySignedApt: async () => {
+    const now = dayjs();
+    const startOfMonth = now.startOf("month").valueOf();
+    const endOfMonth = now.endOf("month").valueOf();
+
+    const aptStatistics = await ApartmentModel.findMonthlySignedApt(
+      startOfMonth,
+      endOfMonth
+    );
+    if (!aptStatistics) {
+      throw new ApiError(StatusCodes.NOT_FOUND, "No statistics found");
+    }
+
+    return aptStatistics;
   },
 
   getAllAvailable: async () => {

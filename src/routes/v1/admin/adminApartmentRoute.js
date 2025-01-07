@@ -7,6 +7,13 @@ const UtilityValidation = require("../../../validations/utilityValidation");
 
 const Router = express.Router();
 
+// /apartments
+Router.route("/monthly-signed-statistics").get(
+  isAuth,
+  isAdmin,
+  AdminApartmentController.getMonthlySignedApt
+);
+
 // /apartments/:apartmentId/utilities
 Router.route("/:id/utilities").post(
   isAuth,

@@ -59,6 +59,16 @@ const AdminApartmentController = {
     }
   },
 
+  getMonthlySignedApt: async (req, res, next) => {
+    try {
+      const result = await ApartmentService.getMonthlySignedApt();
+
+      return res.status(StatusCodes.OK).json(result);
+    } catch (error) {
+      next(error);
+    }
+  },
+
   getAptWithUser: async (req, res, next) => {
     try {
       const { id } = req.params;

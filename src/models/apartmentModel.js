@@ -49,9 +49,12 @@ const ApartmentModel = {
   },
 
   findAllAvailableStatus: async () => {
-    return await getDB().collection(APARTMENT_COLLECTION_NAME).find({
-      status: APARTMENT_STATUS.AVAILABLE,
-    }).toArray();
+    return await getDB()
+      .collection(APARTMENT_COLLECTION_NAME)
+      .find({
+        status: APARTMENT_STATUS.AVAILABLE,
+      })
+      .toArray();
   },
 
   findByUserId: async (userId) => {
@@ -85,6 +88,18 @@ const ApartmentModel = {
       .toArray();
 
     return apartments;
+  },
+
+  findMonthlySignedApt: async (startTime, endTime) => {
+    return await getDB()
+      .collection(APARTMENT_COLLECTION_NAME)
+      .find({
+        startOfTenancy: {
+          $gte: startTime,
+          $lte: endTime,
+        },
+      })
+      .toArray();
   },
 
   findOne: async (id) => {

@@ -7,12 +7,14 @@ const InvoiceValidation = require("../../../validations/invoiceValidation");
 const Router = express.Router();
 
 // /utilities/:id/invoice
-Router.route("/:id/invoices").post(
-  isAuth,
-  isAdmin,
-  InvoiceValidation.create,
-  AdminInvoiceController.create
-);
+Router.route("/:id/invoices")
+  .post(
+    isAuth,
+    isAdmin,
+    InvoiceValidation.create,
+    AdminInvoiceController.create
+  )
+  .get(isAuth, isAdmin, AdminInvoiceController.getUtilityInvoices);
 
 // /utilities/:id
 Router.route("/:id").put(

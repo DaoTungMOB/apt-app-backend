@@ -47,6 +47,18 @@ const InvoiceService = {
     return newInvoice;
   },
 
+  get: async (invoiceId) => {
+    const invoice = await InvoiceModel.getOne(invoiceId);
+
+    return invoice;
+  },
+
+  getAll: async (utilityId) => {
+    const invoices = await InvoiceModel.getAll(utilityId);
+
+    return invoices;
+  },
+
   getWithYearAndMonth: async (utilityId, year, month) => {
     const invoice = await InvoiceModel.getWithYearAndMonth(
       utilityId,

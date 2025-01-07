@@ -22,6 +22,16 @@ const InvoiceModel = {
       .insertOne(fullData);
   },
 
+  getAll: async (utilityId) => {
+    return await getDB()
+      .collection(INVOICE_COLLECTION_NAME)
+      .find({
+        utilityId: new ObjectId(utilityId),
+      })
+      .sort({ year: -1, month: -1 })
+      .toArray();
+  },
+
   getWithYearAndMonth: async (utilityId, year, month) => {
     return await getDB()
       .collection(INVOICE_COLLECTION_NAME)

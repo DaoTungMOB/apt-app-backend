@@ -5,11 +5,8 @@ const AdminInvoiceController = require("../../../controllers/admin/adminInvoiceC
 const Router = express.Router();
 
 // /invoices/:id
-Router.route("/:id").put(
-  isAuth,
-  isAdmin,
-  InvoiceValidation.update,
-  AdminInvoiceController.update
-);
+Router.route("/:id")
+  .put(isAuth, isAdmin, InvoiceValidation.update, AdminInvoiceController.update)
+  .get(isAuth, isAdmin, AdminInvoiceController.get);
 
 module.exports = Router;

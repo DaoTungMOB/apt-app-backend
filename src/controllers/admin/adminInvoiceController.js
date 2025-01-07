@@ -14,6 +14,30 @@ const AdminInvoiceController = {
     }
   },
 
+  get: async (req, res, next) => {
+    try {
+      const { id } = req.params;
+
+      const result = await InvoiceService.get(id);
+
+      return res.status(StatusCodes.CREATED).json(result);
+    } catch (error) {
+      next(error);
+    }
+  },
+
+  getUtilityInvoices: async (req, res, next) => {
+    try {
+      const { id: utilityId } = req.params;
+
+      const result = await InvoiceService.getAll(utilityId);
+
+      return res.status(StatusCodes.CREATED).json(result);
+    } catch (error) {
+      next(error);
+    }
+  },
+
   update: async (req, res, next) => {
     try {
       const { id } = req.params;

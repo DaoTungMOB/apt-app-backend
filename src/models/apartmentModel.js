@@ -48,6 +48,12 @@ const ApartmentModel = {
     return apartments;
   },
 
+  findAllAvailableStatus: async () => {
+    return await getDB().collection(APARTMENT_COLLECTION_NAME).find({
+      status: APARTMENT_STATUS.AVAILABLE,
+    }).toArray();
+  },
+
   findByUserId: async (userId) => {
     const apartments = await getDB()
       .collection(APARTMENT_COLLECTION_NAME)

@@ -9,6 +9,6 @@ Router.get("/:id/utilities", isAuth, UtilityController.getAptUtilities);
 
 Router.get("/:id", isAuth, ApartmentController.getOne);
 
-Router.get("/", isAuth, ApartmentController.getUserApts);
+Router.get("/", isAuth, ApartmentController.getAllAvailabla);
 
 module.exports = Router;

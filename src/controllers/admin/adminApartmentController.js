@@ -80,6 +80,16 @@ const AdminApartmentController = {
     }
   },
 
+  getAllAvailable: async (req, res, next) => {
+    try {
+      const apartments = await ApartmentService.getAllAvailable();
+
+      return res.status(StatusCodes.OK).json(apartments);
+    } catch (error) {
+      next(error);
+    }
+  },
+
   update: async (req, res, next) => {
     try {
       const { id } = req.params;

@@ -14,6 +14,16 @@ const ApartmentController = {
     }
   },
 
+  getAllAvailabla: async (req, res, next) => {
+    try {
+      const apartment = await ApartmentService.getAllAvailable();
+
+      return res.status(StatusCodes.OK).json(apartment);
+    } catch (error) {
+      next(error);
+    }
+  },
+
   getUserApts: async (req, res, next) => {
     try {
       const userId = req.payload.userId;

@@ -2,6 +2,7 @@ const express = require("express");
 const { isAuth } = require("../../middlewares/auth");
 const UserController = require("../../controllers/userController");
 const UserValidation = require("../../validations/userValidation");
+const ApartmentController = require("../../controllers/apartmentController");
 
 const Router = express.Router();
 
@@ -12,5 +13,7 @@ Router.put(
   UserValidation.updateProfile,
   UserController.updateProfile
 );
+
+Router.get("/apartments", isAuth, ApartmentController.getUserApts);
 
 module.exports = Router;

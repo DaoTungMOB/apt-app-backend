@@ -138,6 +138,15 @@ const ApartmentService = {
     return apartments;
   },
 
+  getAllAvailable: async () => {
+    const apartments = await ApartmentModel.findAllAvailableStatus();
+    if (!apartments) {
+      throw new ApiError(StatusCodes.NOT_FOUND, "No apartments found");
+    }
+
+    return apartments;
+  },
+
   getUserApts: async (userId) => {
     const apts = await ApartmentModel.findByUserId(userId);
 

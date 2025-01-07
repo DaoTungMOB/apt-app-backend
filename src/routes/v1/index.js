@@ -2,6 +2,7 @@ const express = require("express");
 const { StatusCodes } = require("http-status-codes");
 const UserRoute = require("./userRoute");
 const ApartmentRoute = require("./apartmentRoute");
+const UtilityRoute = require("./utilityRoute");
 const AuthRoute = require("./authRoute");
 const AdminRoute = require("./admin");
 
@@ -21,5 +22,7 @@ Router.use("/admin", AdminRoute);
 Router.use("/users", UserRoute);
 
 Router.use("/apartments", ApartmentRoute);
+
+Router.use("/utilities", UtilityRoute);
 
 module.exports = Router;

@@ -14,7 +14,7 @@ const ApartmentController = {
     }
   },
 
-  getAllAvailabla: async (req, res, next) => {
+  getAllAvailable: async (req, res, next) => {
     try {
       const apartment = await ApartmentService.getAllAvailable();
 

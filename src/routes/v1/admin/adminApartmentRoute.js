@@ -56,6 +56,6 @@ Router.route("/")
     AparmentValidation.createNew,
     AdminApartmentController.createNew
   )
-  .get(isAuth, isAdmin, AdminApartmentController.getAllAvailable);
+  .get(isAuth, isAdmin, AdminApartmentController.getAll);
 
 module.exports = Router;

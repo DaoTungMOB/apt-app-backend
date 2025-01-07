@@ -8,6 +8,15 @@ const { getLastMonthAndYearFor } = require("../utils/time");
 const { ObjectId } = require("mongodb");
 
 const UtilityService = {
+  get: async (utilityId) => {
+    const utility = await UtilityModel.findOne(utilityId);
+    if (!utility) {
+      throw new ApiError(StatusCodes.NOT_FOUND, "Utility not found");
+    }
+
+    return utility;
+  },
+
   createNew: async (apartmentId, reqBody) => {
     const newUtility = await UtilityModel.createNew({
       ...reqBody,

@@ -1,6 +1,7 @@
 const express = require("express");
 const { StatusCodes } = require("http-status-codes");
 const UserRoute = require("./userRoute");
+const ApartmentRoute = require("./apartmentRoute");
 const AuthRoute = require("./authRoute");
 const AdminRoute = require("./admin");
 const utc = require("dayjs/plugin/utc");
@@ -18,6 +19,8 @@ Router.get("/status", (req, res) => {
 Router.use("/auth", AuthRoute);
 
 Router.use("/users", UserRoute);
+
+Router.use("/apartments", ApartmentRoute);
 
 Router.use("/admin", AdminRoute);
 

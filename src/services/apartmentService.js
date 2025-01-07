@@ -46,6 +46,9 @@ const ApartmentService = {
     }
 
     const apartmentExist = await ApartmentModel.findOne(apartmentId);
+    if (!apartmentExist) {
+      throw new ApiError(StatusCodes.NOT_FOUND, "No apartment found");
+    }
     if (apartmentExist.status !== APARTMENT_STATUS.AVAILABLE) {
       throw new ApiError(
         StatusCodes.BAD_REQUEST,

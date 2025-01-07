@@ -5,8 +5,6 @@ const InvoiceController = require("../../controllers/invoiceController");
 
 const Router = express.Router();
 
-Router.get("/:id/invoices", isAuth, InvoiceController.getUtilityInvoices);
-
-Router.get("/:id", isAuth, UtilityController.get);
+Router.get("/:id", isAuth, InvoiceController.get);
 
 module.exports = Router;

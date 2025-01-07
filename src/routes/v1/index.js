@@ -25,4 +25,6 @@ Router.use("/apartments", ApartmentRoute);
 
 Router.use("/utilities", UtilityRoute);
 
+Router.use("/invoices", UtilityRoute);
+
 module.exports = Router;

@@ -1,5 +1,4 @@
 const { StatusCodes } = require("http-status-codes");
-const ApartmentService = require("../services/apartmentService");
 const UtilityService = require("../services/utilityService");
 
 const UtilityController = {

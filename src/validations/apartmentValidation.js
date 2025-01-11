@@ -14,6 +14,7 @@ const AparmentValidation = {
         userId: Joi.string()
           .pattern(OBJECT_ID_RULE)
           .message(OBJECT_ID_RULE_MESSAGE),
+        description: Joi.string(),
         code: Joi.string().required(),
         thumbnail: Joi.string(),
         imageUrls: Joi.array(),

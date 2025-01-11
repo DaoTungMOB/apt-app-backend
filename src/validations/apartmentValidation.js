@@ -98,6 +98,7 @@ const AparmentValidation = {
   update: async (req, res, next) => {
     try {
       const schema = Joi.object({
+        description: Joi.string(),
         code: Joi.string(),
         thumbnail: Joi.string(),
         floorNumber: Joi.number(),

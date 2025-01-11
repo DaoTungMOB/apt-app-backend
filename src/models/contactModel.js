@@ -23,6 +23,14 @@ const ContactModel = {
       .insertOne(fullData);
   },
 
+  findOne: async (contactId) => {
+    return await getDB()
+      .collection(CONTACT_COLLECTION_NAME)
+      .findOne({
+        _id: new ObjectId(contactId),
+      });
+  },
+
   findAll: async () => {
     return await getDB()
       .collection(CONTACT_COLLECTION_NAME)

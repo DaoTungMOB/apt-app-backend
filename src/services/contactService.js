@@ -13,6 +13,10 @@ const ContactService = {
     return await ContactModel.createNew({ ...reqBody, userId });
   },
 
+  getOne: async (contactId) => {
+    return await ContactModel.findOne(contactId);
+  },
+
   getAll: async () => {
     return await ContactModel.findAll();
   },

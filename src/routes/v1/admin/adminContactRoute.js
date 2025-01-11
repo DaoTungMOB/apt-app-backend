@@ -5,7 +5,7 @@ const Router = express.Router();
 
 Router.route("/").get(AdminContactController.getAll);
 
-Router.route("/:id").put(
+Router.route("/:id").get(AdminContactController.getOne).put(
   ContactValidation.update,
   AdminContactController.updateOne
 );

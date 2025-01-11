@@ -23,6 +23,7 @@ const UserValidation = {
         "string.pattern.base": PASSWORD_RULE_MESSAGE,
         "string.empty": "Mật khẩu không thể rỗng",
       }),
+      avatar: Joi.string(),
       cccd: Joi.string().required().pattern(CCCD_RULE).messages({
         "string.pattern.base": CCCD_MESSAGE,
       }),
@@ -56,6 +57,7 @@ const UserValidation = {
       cccd: Joi.string().pattern(CCCD_RULE).messages({
         "string.pattern.base": CCCD_MESSAGE,
       }),
+      avatar: Joi.string(),
       birthDay: Joi.date(),
       phone: Joi.string().pattern(PHONE_RULE).messages({
         "string.pattern.base": PHONE_MESSAGE,

@@ -57,18 +57,24 @@ const ContractModel = {
       .toArray();
   },
 
-  findAllForUser: async (apartmentId, userId) => {
+  findAptContractsForUser: async (apartmentId, userId) => {
     return await getDB()
       .collection(CONTRACT_COLLECTION_NAME)
-      .aggregate([
-        {
-          $match: {
-            apartmentId: new ObjectId(apartmentId),
-            userId: new ObjectId(userId),
-          },
-        },
-        { $sort: { createdAt: -1 } },
-      ])
+      .find({
+        apartmentId: new ObjectId(apartmentId),
+        userId: new ObjectId(userId),
+      })
+      .sort({ createdAt: -1 })
+      .toArray();
+  },
+
+  findAllForUser: async (userId) => {
+    return await getDB()
+      .collection(CONTRACT_COLLECTION_NAME)
+      .find({
+        userId: new ObjectId(userId),
+      })
+      .sort({ createdAt: -1 })
       .toArray();
   },
 

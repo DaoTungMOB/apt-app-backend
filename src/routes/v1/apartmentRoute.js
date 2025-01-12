@@ -8,7 +8,7 @@ const Router = express.Router();
 
 Router.get("/:id/utilities", isAuth, UtilityController.getAptUtilities);
 
-Router.get("/:id/contracts", isAuth, ContractController.getAllForUser);
+Router.get("/:id/contracts", isAuth, ContractController.getAptContracts);
 
 Router.get("/:id", isAuth, ApartmentController.getOne);
 

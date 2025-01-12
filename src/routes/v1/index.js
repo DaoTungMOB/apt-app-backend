@@ -5,9 +5,9 @@ const ApartmentRoute = require("./apartmentRoute");
 const UtilityRoute = require("./utilityRoute");
 const InvoiceRoute = require("./invoiceRoute");
 const ContactRoute = require("./contactRoute");
+const ContractRoute = require("./contractRoute");
 const AuthRoute = require("./authRoute");
 const AdminRoute = require("./admin");
-const { isAdmin, isAuth } = require("../../middlewares/auth");
 
 const Router = express.Router();
 
@@ -31,5 +31,7 @@ Router.use("/utilities", UtilityRoute);
 Router.use("/invoices", InvoiceRoute);
 
 Router.use("/contacts", ContactRoute);
+
+Router.use("/contracts", ContractRoute);
 
 module.exports = Router;

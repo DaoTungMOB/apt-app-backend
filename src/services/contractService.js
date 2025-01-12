@@ -5,8 +5,12 @@ const ContractService = {
     return await ContractModel.findAll(apartmentId);
   },
 
-  getAllForUser: async (apartmentId, userId) => {
-    return await ContractModel.findAllForUser(apartmentId, userId);
+  getAllForUser: async (userId) => {
+    return await ContractModel.findAllForUser(userId);
+  },
+
+  getAptContractsForUser: async (apartmentId, userId) => {
+    return await ContractModel.findAptContractsForUser(apartmentId, userId);
   },
 };
 

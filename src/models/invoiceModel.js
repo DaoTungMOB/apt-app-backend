@@ -10,6 +10,7 @@ const InvoiceModel = {
     const fullData = {
       ...data,
       utilityId: new ObjectId(data.utilityId),
+      userId: new ObjectId(data.userId),
       activatedAt: data.activatedAt || null,
       status: data.status || false,
       createdAt: Date.now(),
@@ -32,11 +33,12 @@ const InvoiceModel = {
       .toArray();
   },
 
-  getWithYearAndMonth: async (utilityId, year, month) => {
+  getWithYearAndMonth: async (utilityId, userId, year, month) => {
     return await getDB()
       .collection(INVOICE_COLLECTION_NAME)
       .findOne({
         utilityId: new ObjectId(utilityId),
+        userId: new ObjectId(userId),
         year,
         month,
       });
@@ -74,6 +76,10 @@ const InvoiceModel = {
     if (updateData.utilityId) {
       updateData.utilityId = new ObjectId(updateData.utilityId);
     }
+    if (updateData.userId) {
+      updateData.userId = new ObjectId(updateData.userId);
+    }
+
     let updateCommand = {
       $set: { ...updateData },
     };

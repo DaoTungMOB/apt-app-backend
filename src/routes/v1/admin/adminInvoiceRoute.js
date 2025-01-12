@@ -9,4 +9,6 @@ Router.route("/:id")
   .put(isAuth, isAdmin, InvoiceValidation.update, AdminInvoiceController.update)
   .get(isAuth, isAdmin, AdminInvoiceController.get);
 
+// TODO: get apartment's invoices history
+
 module.exports = Router;

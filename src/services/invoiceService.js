@@ -2,9 +2,15 @@ const { StatusCodes } = require("http-status-codes");
 const InvoiceModel = require("../models/invoiceModel");
 const UtilityModel = require("../models/utilityModel");
 const ApiError = require("../utils/ApiError");
+const UserModel = require("../models/userModel");
 
 const InvoiceService = {
   create: async (utilityId, reqBody) => {
+    const userExist = await UserModel.findOne(reqBody.userId);
+    if (!userExist) {
+      throw new ApiError(StatusCodes.NOT_FOUND, "No user found");
+    }
+
     let quantity = reqBody.quantity;
     if (reqBody.previousReading && reqBody.currentReading) {
       if (reqBody.currentReading >= reqBody.previousReading) {
@@ -24,6 +30,7 @@ const InvoiceService = {
 
     const invoiceExist = await InvoiceModel.getWithYearAndMonth(
       utilityId,
+      reqBody.userId,
       reqBody.year,
       reqBody.month
     );
@@ -59,20 +66,12 @@ const InvoiceService = {
     return invoices;
   },
 
-  getWithYearAndMonth: async (utilityId, year, month) => {
-    const invoice = await InvoiceModel.getWithYearAndMonth(
-      utilityId,
-      year,
-      month
-    );
-    if (!invoice) {
-      throw new ApiError(StatusCodes.NOT_FOUND, "No invoice found");
+  update: async (invoiceId, reqBody) => {
+    const userExist = await UserModel.findOne(reqBody.userId);
+    if (!userExist) {
+      throw new ApiError(StatusCodes.NOT_FOUND, "No user found");
     }
 
-    return invoice;
-  },
-
-  update: async (invoiceId, reqBody) => {
     const invoiceExist = await InvoiceModel.getOne(invoiceId);
     if (!invoiceExist) {
       throw new ApiError(StatusCodes.NOT_FOUND, "No invoice found");

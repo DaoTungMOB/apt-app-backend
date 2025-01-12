@@ -5,9 +5,10 @@ const Router = express.Router();
 
 Router.route("/").get(AdminContactController.getAll);
 
-Router.route("/:id").get(AdminContactController.getOne).put(
-  ContactValidation.update,
-  AdminContactController.updateOne
-);
+Router.route("/:id")
+  .get(AdminContactController.getOne)
+  .put(ContactValidation.update, AdminContactController.updateOne);
+
+// TODO: get contacts
 
 module.exports = Router;

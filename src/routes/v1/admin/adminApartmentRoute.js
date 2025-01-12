@@ -67,4 +67,6 @@ Router.route("/")
   )
   .get(isAuth, isAdmin, AdminApartmentController.getAll);
 
+// TODO: get apartment rental history
+
 module.exports = Router;

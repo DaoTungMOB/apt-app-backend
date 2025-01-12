@@ -6,7 +6,7 @@ const { ROLE } = require("../utils/auth");
 
 const USER_COLLECTION_NAME = "users";
 
-const INVALID_UPDATE_FIELDS = ["_id", "password", "createdAt"];
+const INVALID_UPDATE_FIELDS = ["_id", "createdAt"];
 
 const UserModel = {
   createNew: async (data) => {
@@ -80,6 +80,7 @@ const UserModel = {
         delete updateData[field];
       }
     });
+
     if (updateData && Object.keys(updateData).length > 0) {
       updateData.updatedAt = Date.now();
     }

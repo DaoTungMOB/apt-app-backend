@@ -55,6 +55,22 @@ const UserService = {
     return updatedUser;
   },
 
+  changeUserPassword: async (id, reqBody) => {
+    const { oldPassword, newPassword } = reqBody;
+    const userExist = await UserModel.findOne(id);
+    if (!userExist) {
+      throw new ApiError(StatusCodes.NOT_FOUND, "No user found");
+    }
+
+    const checkPassword = bcrypt.compareSync(oldPassword, userExist.password);
+    if (!checkPassword) {
+      throw new ApiError(StatusCodes.BAD_REQUEST, "Old password is incorrect");
+    }
+
+    const hash = bcrypt.hashSync(newPassword, 12);
+    return await UserModel.update(id, { password: hash });
+  },
+
   softDelete: async (id) => {
     const userExist = await UserModel.findOne(id);
     if (!userExist) {

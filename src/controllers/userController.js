@@ -1,12 +1,10 @@
 const { StatusCodes } = require("http-status-codes");
 const UserService = require("../services/userService");
-const ApartmentService = require("../services/apartmentService");
 
 const UserController = {
   getProfile: async (req, res, next) => {
     try {
       const userId = req.payload.userId;
-      console.log("userId", userId);
       const user = await UserService.getById(userId);
 
       return res.status(StatusCodes.OK).json(user);
@@ -21,6 +19,19 @@ const UserController = {
       const updatedUser = await UserService.update(userId, req.body);
 
       return res.status(StatusCodes.OK).json(updatedUser);
+    } catch (error) {
+      next(error);
+    }
+  },
+
+  changePassword: async (req, res, next) => {
+    try {
+      const userId = req.payload.userId;
+      const result = await UserService.changeUserPassword(userId, req.body);
+
+      return res
+        .status(StatusCodes.OK)
+        .json({ message: "Password changed successfully" });
     } catch (error) {
       next(error);
     }

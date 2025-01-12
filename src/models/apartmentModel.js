@@ -52,7 +52,6 @@ const ApartmentModel = {
     let command = {
       status: APARTMENT_STATUS.AVAILABLE,
     };
-    console.log("filter", filter);
 
     if (filter.sellFilter && Object.keys(filter.sellFilter).length > 0) {
       command = {
@@ -68,7 +67,6 @@ const ApartmentModel = {
       };
     }
 
-    console.log("command", command);
 
     return await getDB()
       .collection(APARTMENT_COLLECTION_NAME)

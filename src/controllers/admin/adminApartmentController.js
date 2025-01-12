@@ -44,6 +44,19 @@ const AdminApartmentController = {
     }
   },
 
+  removeUser: async (req, res, next) => {
+    try {
+      const { id: userId } = req.params;
+      await ApartmentService.removeUser(userId);
+
+      return res.status(StatusCodes.OK).json({
+        message: "User removed successfully",
+      });
+    } catch (error) {
+      next(error);
+    }
+  },
+
   changeStatus: async (req, res, next) => {
     try {
       const { id } = req.params;

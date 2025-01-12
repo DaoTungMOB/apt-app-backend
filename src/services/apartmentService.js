@@ -169,6 +169,49 @@ const ApartmentService = {
     }
   },
 
+  removeUser: async (apartmentId) => {
+    const client = getClientInstance();
+    const session = client.startSession();
+    session.startTransaction();
+
+    try {
+      const apartment = await ApartmentModel.findOne(apartmentId);
+      if (!apartment) {
+        throw new ApiError(StatusCodes.NOT_FOUND, "No apartment found");
+      }
+
+      // update apartment
+      await ApartmentModel.update(
+        apartmentId,
+        { status: APARTMENT_STATUS.AVAILABLE },
+        { userId: null },
+        session
+      );
+
+      const latestContract = await ContractModel.getLatestContract(apartmentId);
+      if (latestContract.length === 0) {
+        throw new ApiError(StatusCodes.NOT_FOUND, "No contract found");
+      }
+
+      // update latest contract
+      const now = new Date().getTime();
+      await ContractModel.update(
+        latestContract[0]._id,
+        { actualEndDate: now, status: CONTRACT_STATUS.ENDED },
+        {},
+        session
+      );
+
+      await session.commitTransaction();
+    } catch (error) {
+      await session.abortTransaction();
+      console.log("Transaction aborted:", error);
+      throw error;
+    } finally {
+      session.endSession();
+    }
+  },
+
   changeStatus: async (apartmentId, reqBody) => {
     const existApt = await ApartmentModel.findOne(apartmentId);
     if (!existApt) {

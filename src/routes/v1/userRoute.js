@@ -6,6 +6,7 @@ const ApartmentController = require("../../controllers/apartmentController");
 
 const Router = express.Router();
 
+// TODO: add change pass, forgot pass, update profile
 Router.get("/profile", isAuth, UserController.getProfile);
 Router.put(
   "/profile",

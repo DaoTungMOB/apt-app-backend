@@ -137,17 +137,17 @@ const ApartmentModel = {
         delete updateData[field];
       }
     });
-    if (updateData && Object.keys(updateData).length > 0) {
+    if (
+      (updateData && Object.keys(updateData).length > 0) ||
+      (unsetData && Object.keys(unsetData).length > 0)
+    ) {
       updateData.updatedAt = Date.now();
     }
 
-    console.log("updateData", updateData);
     let updateCommand = {
       $set: { ...updateData },
     };
-    if (unsetData) {
-      console.log("unsetData", unsetData);
-    }
+
     if (unsetData && Object.keys(unsetData).length > 0) {
       updateCommand = {
         ...updateCommand,
@@ -155,7 +155,6 @@ const ApartmentModel = {
       };
     }
 
-    console.log("updateCommand");
     if (session) {
       return await getDB()
         .collection(APARTMENT_COLLECTION_NAME)

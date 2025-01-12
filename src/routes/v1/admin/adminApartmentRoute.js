@@ -43,7 +43,8 @@ Router.route("/:id/users")
     isAdmin,
     AparmentValidation.changeUser,
     AdminApartmentController.changeUser
-  );
+  )
+  .delete(isAuth, isAdmin, AdminApartmentController.removeUser);
 
 // /apartments/:apartmentId
 Router.route("/:id")
@@ -56,6 +57,7 @@ Router.route("/:id")
   );
 
 // /apartments
+// TODO: Thêm filter cho api get apartments
 Router.route("/")
   .post(
     isAuth,

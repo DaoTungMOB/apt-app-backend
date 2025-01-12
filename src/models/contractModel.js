@@ -57,6 +57,21 @@ const ContractModel = {
       .toArray();
   },
 
+  findAllForUser: async (apartmentId, userId) => {
+    return await getDB()
+      .collection(CONTRACT_COLLECTION_NAME)
+      .aggregate([
+        {
+          $match: {
+            apartmentId: new ObjectId(apartmentId),
+            userId: new ObjectId(userId),
+          },
+        },
+        { $sort: { createdAt: -1 } },
+      ])
+      .toArray();
+  },
+
   update: async (id, updateData, unsetData, session) => {
     INVALID_UPDATE_FIELDS.forEach((field) => {
       if (updateData.hasOwnProperty(field)) {

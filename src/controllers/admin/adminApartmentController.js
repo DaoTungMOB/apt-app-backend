@@ -16,8 +16,12 @@ const AdminApartmentController = {
   addUser: async (req, res, next) => {
     try {
       const { id } = req.params;
-      const { userId, status } = req.body;
-      const apartment = await ApartmentService.addUser(id, userId, status);
+      const { userId, status, startDate, endDate } = req.body;
+      const apartment = await ApartmentService.addUser(id, userId, {
+        status,
+        startDate,
+        endDate,
+      });
 
       return res.status(StatusCodes.OK).json(apartment);
     } catch (error) {

@@ -4,6 +4,9 @@ const UserModel = require("../models/userModel");
 const { update } = require("./userService");
 const ApiError = require("../utils/ApiError");
 const dayjs = require("dayjs");
+const { CONTRACT_STATUS } = require("../utils/contract");
+const ContractModel = require("../models/contractModel");
+const { getClientInstance } = require("../config/mongodb");
 
 const APARTMENT_STATUS = {
   UNAVAILABLE: "unavailable",
@@ -40,32 +43,57 @@ const ApartmentService = {
     return createdApartment;
   },
 
-  addUser: async (apartmentId, userId, status) => {
-    const userExist = await UserModel.findOne(userId);
-    if (!userExist) {
-      throw new ApiError(StatusCodes.NOT_FOUND, "No user found");
-    }
+  addUser: async (apartmentId, userId, data) => {
+    const client = getClientInstance();
+    const session = client.startSession();
+    session.startTransaction();
 
-    const apartmentExist = await ApartmentModel.findOne(apartmentId);
-    if (!apartmentExist) {
-      throw new ApiError(StatusCodes.NOT_FOUND, "No apartment found");
-    }
-    if (apartmentExist.status !== APARTMENT_STATUS.AVAILABLE) {
-      throw new ApiError(
-        StatusCodes.BAD_REQUEST,
-        "Apartment is not available to rent or buy"
+    try {
+      const userExist = await UserModel.findOne(userId);
+      if (!userExist) {
+        throw new ApiError(StatusCodes.NOT_FOUND, "No user found");
+      }
+
+      const apartmentExist = await ApartmentModel.findOne(apartmentId);
+      if (!apartmentExist) {
+        throw new ApiError(StatusCodes.NOT_FOUND, "No apartment found");
+      }
+      if (apartmentExist.status !== APARTMENT_STATUS.AVAILABLE) {
+        throw new ApiError(
+          StatusCodes.BAD_REQUEST,
+          "Apartment is not available to rent or buy"
+        );
+      }
+
+      // update apartment
+      const updatedApartment = await ApartmentModel.update(
+        apartmentId,
+        {
+          userId: userExist._id,
+          status: data.status,
+        },
+        {},
+        session
       );
-    }
 
-    const updatedApartment = await ApartmentModel.update(apartmentId, {
-      userId: userExist._id,
-      status,
-    });
-    if (!updatedApartment) {
-      throw new ApiError(StatusCodes.NOT_FOUND, "No apartment found");
-    }
+      // create contract
+      await ContractModel.createNew({
+        userId: userExist._id,
+        apartmentId: updatedApartment._id,
+        ...data,
+        type: CONTRACT_STATUS.EFFECTIVE,
+      });
 
-    return updatedApartment;
+      await session.commitTransaction();
+
+      return updatedApartment;
+    } catch (error) {
+      await session.abortTransaction();
+      console.log("Transaction aborted:", error);
+      throw error;
+    } finally {
+      session.endSession();
+    }
   },
 
   changeUser: async (apartmentId, userId) => {

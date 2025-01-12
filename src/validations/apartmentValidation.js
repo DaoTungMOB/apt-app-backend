@@ -49,9 +49,13 @@ const AparmentValidation = {
             ...Object.values([APARTMENT_STATUS.RENTED, APARTMENT_STATUS.SOLD])
           )
           .required(),
+        startDate: Joi.date().timestamp("javascript").required(),
+        endDate: Joi.date().timestamp("javascript").required(),
       });
 
-      await schema.validateAsync(req.body, { abortEarly: false });
+      await schema.validateAsync(req.body, {
+        abortEarly: false,
+      });
 
       next();
     } catch (error) {

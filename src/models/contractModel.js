@@ -44,14 +44,14 @@ const ContractModel = {
         delete updateData[field];
       }
     });
-    if (Object.keys(updateData).length > 0) {
+    if (updateData && Object.keys(updateData).length > 0) {
       updateData.updatedAt = Date.now();
     }
 
     let updateCommand = {
       $set: { ...updateData },
     };
-    if (Object.keys(unsetData).length > 0) {
+    if (unsetData && Object.keys(unsetData).length > 0) {
       updateCommand = {
         ...updateCommand,
         $unset: { ...unsetData },

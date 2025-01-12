@@ -85,11 +85,13 @@ const AparmentValidation = {
     try {
       const schema = Joi.object({
         status: Joi.string()
-          .valid(...Object.values(APARTMENT_STATUS))
+          .valid(
+            ...Object.values([
+              APARTMENT_STATUS.AVAILABLE,
+              APARTMENT_STATUS.UNAVAILABLE,
+            ])
+          )
           .required(),
-        userId: Joi.string()
-          .pattern(OBJECT_ID_RULE)
-          .message(OBJECT_ID_RULE_MESSAGE),
       });
 
       await schema.validateAsync(req.body, { abortEarly: false });

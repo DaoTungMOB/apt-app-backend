@@ -54,14 +54,14 @@ const ApartmentModel = {
     };
     console.log("filter", filter);
 
-    if (Object.keys(filter.sellFilter).length > 0) {
+    if (filter.sellFilter && Object.keys(filter.sellFilter).length > 0) {
       command = {
         ...command,
         sellPrice: filter.sellFilter,
       };
     }
 
-    if (Object.keys(filter.rentFilter).length > 0) {
+    if (filter.rentFilter && Object.keys(filter.rentFilter).length > 0) {
       command = {
         ...command,
         rentPrice: filter.rentFilter,
@@ -137,36 +137,39 @@ const ApartmentModel = {
         delete updateData[field];
       }
     });
-    if (Object.keys(updateData).length > 0) {
+    if (updateData && Object.keys(updateData).length > 0) {
       updateData.updatedAt = Date.now();
     }
 
+    console.log("updateData", updateData);
     let updateCommand = {
       $set: { ...updateData },
     };
-    if (Object.keys(unsetData).length > 0) {
+    if (unsetData) {
+      console.log("unsetData", unsetData);
+    }
+    if (unsetData && Object.keys(unsetData).length > 0) {
       updateCommand = {
         ...updateCommand,
         $unset: { ...unsetData },
       };
     }
-    let result;
+
+    console.log("updateCommand");
     if (session) {
-      result = await getDB()
+      return await getDB()
         .collection(APARTMENT_COLLECTION_NAME)
         .findOneAndUpdate({ _id: new ObjectId(_id) }, updateCommand, {
           session,
           returnDocument: "after",
         });
-    } else {
-      result = await getDB()
-        .collection(APARTMENT_COLLECTION_NAME)
-        .findOneAndUpdate({ _id: new ObjectId(_id) }, updateCommand, {
-          returnDocument: "after",
-        });
     }
 
-    return result;
+    return await getDB()
+      .collection(APARTMENT_COLLECTION_NAME)
+      .findOneAndUpdate({ _id: new ObjectId(_id) }, updateCommand, {
+        returnDocument: "after",
+      });
   },
 
   softDelete: async (id) => {

@@ -174,32 +174,18 @@ const ApartmentService = {
     if (!existApt) {
       throw new ApiError(StatusCodes.NOT_FOUND, "No apartment found");
     }
-
-    let updatedApartment;
-
-    // Nếu status là rented hoặc sold thì kiểm tra user
     if (
-      reqBody.status === APARTMENT_STATUS.RENTED ||
-      reqBody.status === APARTMENT_STATUS.SOLD
+      existApt.status !== APARTMENT_STATUS.AVAILABLE &&
+      existApt.status !== APARTMENT_STATUS.UNAVAILABLE
     ) {
-      const userExist = await UserModel.findOne(reqBody.userId);
-      if (!userExist) {
-        throw new ApiError(StatusCodes.NOT_FOUND, "No user found");
-      }
-
-      updatedApartment = await ApartmentModel.update(apartmentId, {
-        userId: userExist._id,
-        status: reqBody.status,
-      });
-    } else {
-      updatedApartment = await ApartmentModel.update(
-        apartmentId,
-        {
-          status: reqBody.status,
-        },
-        { userId: null }
+      throw new ApiError(
+        StatusCodes.BAD_REQUEST,
+        "Apartment status must be available or unavailable"
       );
     }
+
+    const updatedApartment = await ApartmentModel.update(apartmentId, reqBody);
+
     return updatedApartment;
   },
 

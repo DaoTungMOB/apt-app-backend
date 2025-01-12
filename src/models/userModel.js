@@ -80,7 +80,7 @@ const UserModel = {
         delete updateData[field];
       }
     });
-    if (Object.keys(updateData).length > 0) {
+    if (updateData && Object.keys(updateData).length > 0) {
       updateData.updatedAt = Date.now();
     }
 

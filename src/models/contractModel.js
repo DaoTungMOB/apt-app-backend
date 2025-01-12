@@ -57,6 +57,14 @@ const ContractModel = {
       .toArray();
   },
 
+  findAllUserContracts: async (userId) => {
+    return await getDB()
+      .collection(CONTRACT_COLLECTION_NAME)
+      .find({ userId: new ObjectId(userId) })
+      .sort({ createdAt: -1 })
+      .toArray();
+  },
+
   findAptContractsForUser: async (apartmentId, userId) => {
     return await getDB()
       .collection(CONTRACT_COLLECTION_NAME)

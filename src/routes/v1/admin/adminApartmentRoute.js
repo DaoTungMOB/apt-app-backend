@@ -51,7 +51,7 @@ Router.route("/:id/users")
 Router.route("/:id/contracts").get(
   isAuth,
   isAdmin,
-  AdminContractController.getAll
+  AdminContractController.getAptContracts
 );
 
 // /apartments/:apartmentId

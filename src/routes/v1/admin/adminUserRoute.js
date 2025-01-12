@@ -2,6 +2,7 @@ const express = require("express");
 const { isAuth, isAdmin } = require("../../../middlewares/auth");
 const AdminUserController = require("../../../controllers/admin/adminUserController");
 const UserValidation = require("../../../validations/userValidation");
+const AdminContractController = require("../../../controllers/admin/adminContractController");
 
 const Router = express.Router();
 
@@ -11,6 +12,9 @@ Router.route("/:id/apartments").get(
   isAdmin,
   AdminUserController.getApts
 );
+
+// users/:id/contracts
+Router.route("/:id/contracts").get(isAuth, isAdmin, AdminContractController.getUserContracts);
 
 // users/:id
 Router.route("/:id")

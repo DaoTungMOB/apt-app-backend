@@ -2,14 +2,25 @@ const { StatusCodes } = require("http-status-codes");
 const ContractService = require("../../services/contractService");
 
 const AdminContractController = {
-  getAll: async (req, res, next) => {
+  getAptContracts: async (req, res, next) => {
     try {
       const { id: apartmentId } = req.params;
-      const contracts = await ContractService.getAllApartmentContracts(
+      const result = await ContractService.getAllApartmentContracts(
         apartmentId
       );
 
-      return res.status(StatusCodes.OK).json(contracts);
+      return res.status(StatusCodes.OK).json(result);
+    } catch (error) {
+      next(error);
+    }
+  },
+
+  getUserContracts: async (req, res, next) => {
+    try {
+      const { id: userId } = req.params;
+      const result = await ContractService.getAllUserContracts(userId);
+
+      return res.status(StatusCodes.OK).json(result);
     } catch (error) {
       next(error);
     }

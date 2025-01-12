@@ -32,8 +32,11 @@ const AdminApartmentController = {
   changeUser: async (req, res, next) => {
     try {
       const { id } = req.params;
-      const { userId } = req.body;
-      const apartment = await ApartmentService.changeUser(id, userId);
+      const { userId, endDate } = req.body;
+      const apartment = await ApartmentService.changeUser(id, {
+        userId,
+        endDate,
+      });
 
       return res.status(StatusCodes.OK).json(apartment);
     } catch (error) {

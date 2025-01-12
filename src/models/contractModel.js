@@ -28,6 +28,45 @@ const ContractModel = {
         .insertOne(fullData);
     }
   },
+
+  getLatestContract: async (apartmentId) => {
+    return await getDB()
+      .collection(CONTRACT_COLLECTION_NAME)
+      .find({ apartmentId: new ObjectId(apartmentId) })
+      .sort({ createdAt: -1 })
+      .limit(1)
+      .toArray();
+  },
+
+  update: async (id, updateData, unsetData, session) => {
+    INVALID_UPDATE_FIELDS.forEach((field) => {
+      if (updateData.hasOwnProperty(field)) {
+        delete updateData[field];
+      }
+    });
+    if (Object.keys(updateData).length > 0) {
+      updateData.updatedAt = Date.now();
+    }
+
+    let updateCommand = {
+      $set: { ...updateData },
+    };
+    if (Object.keys(unsetData).length > 0) {
+      updateCommand = {
+        ...updateCommand,
+        $unset: { ...unsetData },
+      };
+    }
+
+    if (session) {
+      return await getDB()
+        .collection(CONTRACT_COLLECTION_NAME)
+        .updateOne({ _id: new ObjectId(id) }, updateCommand, { session });
+    }
+    return await getDB()
+      .collection(CONTRACT_COLLECTION_NAME)
+      .updateOne({ _id: new ObjectId(id) }, updateCommand);
+  },
 };
 
 module.exports = ContractModel;

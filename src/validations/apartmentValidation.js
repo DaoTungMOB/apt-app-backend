@@ -70,6 +70,7 @@ const AparmentValidation = {
           .pattern(OBJECT_ID_RULE)
           .message(OBJECT_ID_RULE_MESSAGE)
           .required(),
+        endDate: Joi.date().timestamp("javascript").required(),
       });
 
       await schema.validateAsync(req.body, { abortEarly: false });

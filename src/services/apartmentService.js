@@ -81,7 +81,8 @@ const ApartmentService = {
         userId: userExist._id,
         apartmentId: updatedApartment._id,
         ...data,
-        type: CONTRACT_STATUS.EFFECTIVE,
+        type: data.status,
+        status: CONTRACT_STATUS.EFFECTIVE,
       });
 
       await session.commitTransaction();
@@ -96,32 +97,76 @@ const ApartmentService = {
     }
   },
 
-  changeUser: async (apartmentId, userId) => {
-    const apartmentExist = await ApartmentModel.findOne(apartmentId);
-    if (!apartmentExist) {
-      throw new ApiError(StatusCodes.NOT_FOUND, "No apartment found");
-    }
+  changeUser: async (apartmentId, data) => {
+    const client = getClientInstance();
+    const session = client.startSession();
+    session.startTransaction();
 
-    const userExist = await UserModel.findOne(userId);
-    if (!userExist) {
-      throw new ApiError(StatusCodes.NOT_FOUND, "No user found");
-    }
+    try {
+      const apartmentExist = await ApartmentModel.findOne(apartmentId);
+      if (!apartmentExist) {
+        throw new ApiError(StatusCodes.NOT_FOUND, "No apartment found");
+      }
 
-    if (
-      apartmentExist.status !== APARTMENT_STATUS.RENTED &&
-      apartmentExist.status !== APARTMENT_STATUS.SOLD
-    ) {
-      throw new ApiError(
-        StatusCodes.BAD_REQUEST,
-        "Aparment is not rented or sold"
+      const userExist = await UserModel.findOne(data.userId);
+      if (!userExist) {
+        throw new ApiError(StatusCodes.NOT_FOUND, "No user found");
+      }
+
+      if (
+        apartmentExist.status !== APARTMENT_STATUS.RENTED &&
+        apartmentExist.status !== APARTMENT_STATUS.SOLD
+      ) {
+        throw new ApiError(
+          StatusCodes.BAD_REQUEST,
+          "Aparment is not rented or sold"
+        );
+      }
+
+      const updatedApartment = await ApartmentModel.update(
+        apartmentId,
+        {
+          userId: data.userId,
+        },
+        {},
+        session
       );
+
+      const latestContract = await ContractModel.getLatestContract(apartmentId);
+      if (latestContract.length === 0) {
+        throw new ApiError(StatusCodes.NOT_FOUND, "No contract found");
+      }
+      const now = new Date().getTime();
+
+      await ContractModel.update(
+        latestContract[0]._id,
+        { actualEndDate: now, status: CONTRACT_STATUS.ENDED },
+        {},
+        session
+      );
+
+      await ContractModel.createNew(
+        {
+          userId: data.userId,
+          apartmentId: apartmentId,
+          type: latestContract[0].type,
+          status: latestContract[0].status,
+          startDate: now,
+          endDate: data.endDate,
+        },
+        session
+      );
+
+      await session.commitTransaction();
+
+      return updatedApartment;
+    } catch (error) {
+      await session.abortTransaction();
+      console.log("Transaction aborted:", error);
+      throw error;
+    } finally {
+      session.endSession();
     }
-
-    const updatedApartment = await ApartmentModel.update(apartmentId, {
-      userId: userExist._id,
-    });
-
-    return updatedApartment;
   },
 
   changeStatus: async (apartmentId, reqBody) => {

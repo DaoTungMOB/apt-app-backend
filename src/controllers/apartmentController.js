@@ -16,7 +16,7 @@ const ApartmentController = {
 
   getAllAvailable: async (req, res, next) => {
     try {
-      const apartment = await ApartmentService.getAllAvailable();
+      const apartment = await ApartmentService.getAllAvailable(req.query);
 
       return res.status(StatusCodes.OK).json(apartment);
     } catch (error) {

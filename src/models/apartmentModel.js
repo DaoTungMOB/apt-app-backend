@@ -48,12 +48,31 @@ const ApartmentModel = {
     return apartments;
   },
 
-  findAllAvailableStatus: async () => {
+  findAllAvailableStatus: async (filter) => {
+    let command = {
+      status: APARTMENT_STATUS.AVAILABLE,
+    };
+    console.log("filter", filter);
+
+    if (Object.keys(filter.sellFilter).length > 0) {
+      command = {
+        ...command,
+        sellPrice: filter.sellFilter,
+      };
+    }
+
+    if (Object.keys(filter.rentFilter).length > 0) {
+      command = {
+        ...command,
+        rentPrice: filter.rentFilter,
+      };
+    }
+
+    console.log("command", command);
+
     return await getDB()
       .collection(APARTMENT_COLLECTION_NAME)
-      .find({
-        status: APARTMENT_STATUS.AVAILABLE,
-      })
+      .find(command)
       .toArray();
   },
 

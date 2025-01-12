@@ -155,8 +155,42 @@ const ApartmentService = {
     return aptStatistics;
   },
 
-  getAllAvailable: async () => {
-    const apartments = await ApartmentModel.findAllAvailableStatus();
+  getAllAvailable: async (reqQuery) => {
+    const { minSellPrice, maxSellPrice, minRentPrice, maxRentPrice } = reqQuery;
+    let filter = {
+      sellFilter: {},
+      rentFilter: {},
+    };
+
+    // sell price
+    if (minSellPrice) {
+      filter.sellFilter = {
+        ...filter.sellFilter,
+        $gte: parseFloat(minSellPrice),
+      };
+    }
+    if (maxSellPrice) {
+      filter.sellFilter = {
+        ...filter.sellFilter,
+        $lte: parseFloat(maxSellPrice),
+      };
+    }
+
+    // rent price
+    if (minRentPrice) {
+      filter.rentFilter = {
+        ...filter.rentFilter,
+        $gte: parseFloat(minRentPrice),
+      };
+    }
+    if (maxRentPrice) {
+      filter.rentFilter = {
+        ...filter.rentFilter,
+        $lte: parseFloat(maxRentPrice),
+      };
+    }
+
+    const apartments = await ApartmentModel.findAllAvailableStatus(filter);
     if (!apartments) {
       throw new ApiError(StatusCodes.NOT_FOUND, "No apartments found");
     }

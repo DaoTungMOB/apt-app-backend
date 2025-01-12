@@ -29,12 +29,31 @@ const ContractModel = {
     }
   },
 
-  getLatestContract: async (apartmentId) => {
+  findLatestContract: async (apartmentId) => {
     return await getDB()
       .collection(CONTRACT_COLLECTION_NAME)
       .find({ apartmentId: new ObjectId(apartmentId) })
       .sort({ createdAt: -1 })
       .limit(1)
+      .toArray();
+  },
+
+  findAll: async (apartmentId) => {
+    return await getDB()
+      .collection(CONTRACT_COLLECTION_NAME)
+      .aggregate([
+        { $match: { apartmentId: new ObjectId(apartmentId) } },
+        {
+          $lookup: {
+            from: "users",
+            localField: "userId",
+            foreignField: "_id",
+            as: "userProfile",
+          },
+        },
+        { $unwind: { path: "$userProfile", preserveNullAndEmptyArrays: true } },
+        { $sort: { createdAt: -1 } },
+      ])
       .toArray();
   },
 

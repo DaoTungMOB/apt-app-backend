@@ -132,7 +132,7 @@ const ApartmentService = {
         session
       );
 
-      const latestContract = await ContractModel.getLatestContract(apartmentId);
+      const latestContract = await ContractModel.findLatestContract(apartmentId);
       if (latestContract.length === 0) {
         throw new ApiError(StatusCodes.NOT_FOUND, "No contract found");
       }
@@ -188,7 +188,7 @@ const ApartmentService = {
         session
       );
 
-      const latestContract = await ContractModel.getLatestContract(apartmentId);
+      const latestContract = await ContractModel.findLatestContract(apartmentId);
       if (latestContract.length === 0) {
         throw new ApiError(StatusCodes.NOT_FOUND, "No contract found");
       }

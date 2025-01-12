@@ -34,8 +34,22 @@ const ContactModel = {
   findAll: async () => {
     return await getDB()
       .collection(CONTACT_COLLECTION_NAME)
-      .find()
-      .sort({ createdAt: -1 })
+      .aggregate([
+        {
+          $lookup: {
+            from: "users",
+            localField: "userId",
+            foreignField: "_id",
+            as: "userProfile",
+          },
+        },
+        {
+          $unwind: {
+            path: "$userProfile",
+            preserveNullAndEmptyArrays: true,
+          },
+        },
+      ])
       .toArray();
   },
 

@@ -4,6 +4,7 @@ const AdminApartmentController = require("../../../controllers/admin/adminApartm
 const AparmentValidation = require("../../../validations/apartmentValidation");
 const AdminApartmentUtilityController = require("../../../controllers/admin/adminApartmentUtilityController");
 const UtilityValidation = require("../../../validations/utilityValidation");
+const AdminContractController = require("../../../controllers/admin/adminContractController");
 
 const Router = express.Router();
 
@@ -46,6 +47,13 @@ Router.route("/:id/users")
   )
   .delete(isAuth, isAdmin, AdminApartmentController.removeUser);
 
+// /apartments/:apartmentId/contracts
+Router.route("/:id/contracts").get(
+  isAuth,
+  isAdmin,
+  AdminContractController.getAll
+);
+
 // /apartments/:apartmentId
 Router.route("/:id")
   .get(isAuth, isAdmin, AdminApartmentController.getAptWithUser)
@@ -66,7 +74,5 @@ Router.route("/")
     AdminApartmentController.createNew
   )
   .get(isAuth, isAdmin, AdminApartmentController.getAll);
-
-// TODO: get apartment rental history
 
 module.exports = Router;

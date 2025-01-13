@@ -1,5 +1,7 @@
+const bcrypt = require("bcryptjs");
 const { StatusCodes } = require("http-status-codes");
 const AuthService = require("../services/authService");
+const UserService = require("../services/userService");
 
 const AuthController = {
   register: async (req, res, next) => {
@@ -41,6 +43,34 @@ const AuthController = {
 
       return res.status(StatusCodes.OK).json({
         message: "OTP sent successfully",
+      });
+    } catch (error) {
+      next(error);
+    }
+  },
+
+  verifyForgotPasswordOTP: async (req, res, next) => {
+    try {
+      const result = await AuthService.verifyForgotPasswordOTP(req.body);
+
+      return res.status(StatusCodes.OK).json();
+    } catch (error) {
+      next(error);
+    }
+  },
+
+  resetPassword: async (req, res, next) => {
+    try {
+      const { newPassword } = req.body;
+      const { email } = req.payload;
+
+      const user = await UserService.getByEmail(email);
+      const hash = bcrypt.hashSync(newPassword, 12);
+
+      await UserService.update(user._id, { password: hash });
+
+      return res.status(StatusCodes.OK).json({
+        message: "Password changed successfully",
       });
     } catch (error) {
       next(error);

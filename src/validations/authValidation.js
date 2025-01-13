@@ -78,6 +78,22 @@ const AuthValidation = {
       next(new ApiError(StatusCodes.UNPROCESSABLE_ENTITY, error.message));
     }
   },
+
+  resetPassword: async (req, res, next) => {
+    const schema = Joi.object({
+      newPassword: Joi.string().required().pattern(PASSWORD_RULE).messages({
+        "string.pattern.base": PASSWORD_RULE_MESSAGE,
+        "string.empty": "Mật khẩu không thể rỗng",
+      }),
+    });
+    try {
+      await schema.validateAsync(req.body, { abortEarly: false });
+
+      next();
+    } catch (error) {
+      next(new ApiError(StatusCodes.UNPROCESSABLE_ENTITY, error.message));
+    }
+  },
 };
 
 module.exports = AuthValidation;

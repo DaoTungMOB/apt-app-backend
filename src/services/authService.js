@@ -185,6 +185,37 @@ const AuthService = {
       }),
     ]);
   },
+
+  verifyForgotPasswordOTP: async (reqBody) => {
+    const { email, otp } = reqBody;
+
+    const existUser = await UserService.getByEmail(email);
+    if (otp !== existUser.otp) {
+      throw new ApiError(StatusCodes.BAD_REQUEST, "Invalid OTP");
+    }
+
+    if (Date.now() > existUser.otpExpiresAt) {
+      await UserModel.update(existUser._id, { otp: null, otpExpiresAt: null });
+      throw new ApiError(StatusCodes.BAD_REQUEST, "OTP has expired");
+    }
+
+    const token = generateToken(
+      {
+        email: existUser.email,
+      },
+      env.SEND_MAIL_ACCESS_KEY,
+      {
+        expiresIn: "1h",
+      }
+    );
+    await UserModel.update(existUser._id, { otp: null, otpExpiresAt: null });
+
+    return {
+      message: "OTP verified successfully",
+      canResetPassword: true,
+      token,
+    };
+  },
 };
 
 module.exports = AuthService;

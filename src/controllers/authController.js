@@ -32,6 +32,20 @@ const AuthController = {
       next(error);
     }
   },
+
+  forgotPassword: async (req, res, next) => {
+    try {
+      const { email } = req.body;
+
+      await AuthService.forgotPassword(email);
+
+      return res.status(StatusCodes.OK).json({
+        message: "OTP sent successfully",
+      });
+    } catch (error) {
+      next(error);
+    }
+  },
 };
 
 module.exports = AuthController;

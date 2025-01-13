@@ -5,6 +5,9 @@ const bcrypt = require("bcryptjs");
 const { env } = require("../config/environment");
 const UserModel = require("../models/userModel");
 const { generateToken, verifyToken, ROLE } = require("../utils/auth");
+const { generateOTP, forgotPassOtpHtml } = require("../utils/mail");
+const { getTransporter } = require("../config/mail");
+const { sendMail } = require("./mailService");
 
 const accessTokenLife = "86400000";
 const refreshTokenLife = "2592000000";
@@ -157,6 +160,30 @@ const AuthService = {
     } catch (error) {
       throw error;
     }
+  },
+
+  forgotPassword: async (email) => {
+    const existUser = await UserModel.fineOneByEmail(email);
+    if (!existUser) {
+      throw new ApiError(StatusCodes.NOT_FOUND, "Tài khoản không tồn tại");
+    }
+
+    const otp = generateOTP();
+    const transporter = getTransporter();
+    let mailOptions = {
+      from: process.env.MAIL_USER,
+      to: email,
+      subject: "Forgot password",
+      html: forgotPassOtpHtml(otp),
+    };
+
+    let [info, updatedUser] = await Promise.all([
+      sendMail(transporter, mailOptions),
+      UserModel.update(existUser._id, {
+        otp: otp,
+        otpExpiresAt: Date.now() + 1000 * 60 * 5,
+      }),
+    ]);
   },
 };
 

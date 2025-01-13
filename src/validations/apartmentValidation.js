@@ -50,7 +50,11 @@ const AparmentValidation = {
           )
           .required(),
         startDate: Joi.date().timestamp("javascript").required(),
-        endDate: Joi.date().timestamp("javascript").required(),
+        endDate: Joi.when("status", {
+          is: APARTMENT_STATUS.RENTED,
+          then: Joi.date().timestamp("javascript").required(),
+          otherwise: Joi.date().timestamp("javascript"),
+        }),
       });
 
       await schema.validateAsync(req.body, {

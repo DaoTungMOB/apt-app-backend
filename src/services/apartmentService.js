@@ -65,6 +65,10 @@ const ApartmentService = {
         );
       }
 
+      if (data.status === APARTMENT_STATUS.SOLD) {
+        delete data.endDate;
+      }
+
       // update apartment
       const updatedApartment = await ApartmentModel.update(
         apartmentId,
@@ -132,7 +136,9 @@ const ApartmentService = {
         session
       );
 
-      const latestContract = await ContractModel.findLatestContract(apartmentId);
+      const latestContract = await ContractModel.findLatestContract(
+        apartmentId
+      );
       if (latestContract.length === 0) {
         throw new ApiError(StatusCodes.NOT_FOUND, "No contract found");
       }
@@ -188,7 +194,9 @@ const ApartmentService = {
         session
       );
 
-      const latestContract = await ContractModel.findLatestContract(apartmentId);
+      const latestContract = await ContractModel.findLatestContract(
+        apartmentId
+      );
       if (latestContract.length === 0) {
         throw new ApiError(StatusCodes.NOT_FOUND, "No contract found");
       }

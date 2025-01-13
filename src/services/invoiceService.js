@@ -4,13 +4,17 @@ const UtilityModel = require("../models/utilityModel");
 const ApiError = require("../utils/ApiError");
 const UserModel = require("../models/userModel");
 const dayjs = require("dayjs");
+const UserService = require("./userService");
+const ApartmentService = require("./apartmentService");
 
 const InvoiceService = {
   create: async (utilityId, reqBody) => {
-    const userExist = await UserModel.findOne(reqBody.userId);
-    if (!userExist) {
-      throw new ApiError(StatusCodes.NOT_FOUND, "No user found");
+    const utility = await UtilityModel.findOne(utilityId);
+    if (!utility) {
+      throw new ApiError(StatusCodes.NOT_FOUND, "No utility found");
     }
+
+    const apartment = await ApartmentService.getById(utility.apartmentId);
 
     let quantity = reqBody.quantity;
     if (reqBody.previousReading && reqBody.currentReading) {
@@ -24,14 +28,9 @@ const InvoiceService = {
       }
     }
 
-    const utility = await UtilityModel.findOne(utilityId);
-    if (!utility) {
-      throw new ApiError(StatusCodes.NOT_FOUND, "No utility found");
-    }
-
     const invoiceExist = await InvoiceModel.getWithYearAndMonth(
       utilityId,
-      reqBody.userId,
+      apartment.userId,
       reqBody.year,
       reqBody.month
     );
@@ -50,6 +49,7 @@ const InvoiceService = {
       quantity,
       totalPrice: quantity * utility.price,
       utilityId,
+      userId: apartment.userId,
     });
 
     return newInvoice;

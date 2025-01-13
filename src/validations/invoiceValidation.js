@@ -16,10 +16,6 @@ const InvoiceValidation = {
         quantity: Joi.number().required().min(1),
         month: Joi.number().required().min(1).max(12),
         year: Joi.number().required().min(2000),
-        userId: Joi.string()
-          .pattern(OBJECT_ID_RULE)
-          .message(OBJECT_ID_RULE_MESSAGE)
-          .required(),
         activatedAt: Joi.date().timestamp("javascript"),
         status: Joi.boolean(),
       });

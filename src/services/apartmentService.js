@@ -249,22 +249,6 @@ const ApartmentService = {
     return apartments;
   },
 
-  getMonthlySignedApt: async () => {
-    const now = dayjs();
-    const startOfMonth = now.startOf("month").valueOf();
-    const endOfMonth = now.endOf("month").valueOf();
-
-    const aptStatistics = await ApartmentModel.findMonthlySignedApt(
-      startOfMonth,
-      endOfMonth
-    );
-    if (!aptStatistics) {
-      throw new ApiError(StatusCodes.NOT_FOUND, "No statistics found");
-    }
-
-    return aptStatistics;
-  },
-
   getAllAvailable: async (reqQuery) => {
     const { minSellPrice, maxSellPrice, minRentPrice, maxRentPrice } = reqQuery;
     let filter = {
@@ -334,6 +318,36 @@ const ApartmentService = {
     }
 
     return apartment;
+  },
+
+  getMonthlySignedApt: async () => {
+    const now = dayjs();
+    const startOfMonth = now.startOf("month").valueOf();
+    const endOfMonth = now.endOf("month").valueOf();
+
+    const contracts = await ContractModel.findMonthlySignedContracts(
+      startOfMonth,
+      endOfMonth
+    );
+
+    if (!contracts || contracts.length === 0) {
+      return [];
+    }
+
+    const apartments = await Promise.allSettled(
+      contracts.map((item) => ApartmentModel.findOne(item.apartmentId))
+    );
+
+    let aptSet = new Set();
+    apartments.forEach((item) => {
+      if (item.status === "fulfilled" && item.value) {
+        if (!aptSet.has(item.value._id)) {
+          aptSet.add(item.value._id);
+        }
+      }
+    });
+
+    return aptSet.size;
   },
 
   update: async (id, reqBody) => {

@@ -59,6 +59,20 @@ const InvoiceModel = {
     return invoice;
   },
 
+  getMonthlyInvoices: async (startOfMonth, endOfMonth) => {
+    return await getDB()
+      .collection(INVOICE_COLLECTION_NAME)
+      .find({
+        activatedAt: {
+          $gte: startOfMonth,
+          $lte: endOfMonth,
+        },
+        status: true,
+      })
+      .sort({ year: -1, month: -1 })
+      .toArray();
+  },
+
   getOne: async (invoiceId) => {
     return await getDB()
       .collection(INVOICE_COLLECTION_NAME)

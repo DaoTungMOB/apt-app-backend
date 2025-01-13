@@ -5,6 +5,7 @@ const AdminUtilityRoute = require("./adminUtilityRoute");
 const AdminInvoiceRoute = require("./adminInvoiceRoute");
 const AdminContactRoute = require("./adminContactRoute");
 const AdminContractRoute = require("./adminContractRoute");
+const AdminStatisticRoute = require("./adminStatisticRoute");
 const { isAuth, isAdmin } = require("../../../middlewares/auth");
 
 const Router = express.Router();
@@ -20,5 +21,7 @@ Router.use("/invoices", AdminInvoiceRoute);
 Router.use("/contacts", isAuth, isAdmin, AdminContactRoute);
 
 Router.use("/contracts", isAuth, isAdmin, AdminContractRoute);
+
+Router.use("/statistics", isAuth, isAdmin, AdminStatisticRoute);
 
 module.exports = Router;

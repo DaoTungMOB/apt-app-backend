@@ -38,6 +38,16 @@ const AdminInvoiceController = {
     }
   },
 
+  getMonthlyPaidInvoices: async (req, res, next) => {
+    try {
+      const result = await InvoiceService.getMonthlyPaidInvoices();
+
+      return res.status(StatusCodes.CREATED).json(result);
+    } catch (error) {
+      next(error);
+    }
+  },
+
   update: async (req, res, next) => {
     try {
       const { id } = req.params;

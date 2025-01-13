@@ -1,6 +1,7 @@
 const { StatusCodes } = require("http-status-codes");
 const ApartmentService = require("../../services/apartmentService");
 const UserService = require("../../services/userService");
+const ContractService = require("../../services/contractService");
 
 const AdminApartmentController = {
   createNew: async (req, res, next) => {
@@ -79,16 +80,6 @@ const AdminApartmentController = {
     }
   },
 
-  getMonthlySignedApt: async (req, res, next) => {
-    try {
-      const result = await ApartmentService.getMonthlySignedApt();
-
-      return res.status(StatusCodes.OK).json(result);
-    } catch (error) {
-      next(error);
-    }
-  },
-
   getAptWithUser: async (req, res, next) => {
     try {
       const { id } = req.params;
@@ -115,6 +106,16 @@ const AdminApartmentController = {
       const apartments = await ApartmentService.getAllAvailable();
 
       return res.status(StatusCodes.OK).json(apartments);
+    } catch (error) {
+      next(error);
+    }
+  },
+
+  getMonthlySignedApt: async (req, res, next) => {
+    try {
+      const result = await ApartmentService.getMonthlySignedApt();
+
+      return res.status(StatusCodes.OK).json(result);
     } catch (error) {
       next(error);
     }

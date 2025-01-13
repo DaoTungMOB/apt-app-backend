@@ -3,6 +3,7 @@ const InvoiceModel = require("../models/invoiceModel");
 const UtilityModel = require("../models/utilityModel");
 const ApiError = require("../utils/ApiError");
 const UserModel = require("../models/userModel");
+const dayjs = require("dayjs");
 
 const InvoiceService = {
   create: async (utilityId, reqBody) => {
@@ -62,6 +63,19 @@ const InvoiceService = {
 
   getAll: async (utilityId) => {
     const invoices = await InvoiceModel.getAll(utilityId);
+
+    return invoices;
+  },
+
+  getMonthlyPaidInvoices: async () => {
+    const now = dayjs();
+    const startOfMonth = now.startOf("month").valueOf();
+    const endOfMonth = now.endOf("month").valueOf();
+
+    const invoices = await InvoiceModel.getMonthlyInvoices(
+      startOfMonth,
+      endOfMonth
+    );
 
     return invoices;
   },

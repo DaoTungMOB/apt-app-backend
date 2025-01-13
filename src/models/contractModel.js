@@ -2,6 +2,7 @@ const { ObjectId } = require("mongodb");
 const { getDB } = require("../config/mongodb");
 const ApiError = require("../utils/ApiError");
 const { StatusCodes } = require("http-status-codes");
+const { CONTRACT_STATUS } = require("../utils/contract");
 
 const CONTRACT_COLLECTION_NAME = "contracts";
 
@@ -83,6 +84,19 @@ const ContractModel = {
         userId: new ObjectId(userId),
       })
       .sort({ createdAt: -1 })
+      .toArray();
+  },
+
+  findMonthlySignedContracts: async (startOfMonth, endOfMonth) => {
+    return await getDB()
+      .collection(CONTRACT_COLLECTION_NAME)
+      .find({
+        createdAt: {
+          $gte: startOfMonth,
+          $lte: endOfMonth,
+        },
+        status: CONTRACT_STATUS.EFFECTIVE,
+      })
       .toArray();
   },
 

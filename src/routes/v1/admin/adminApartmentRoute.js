@@ -9,13 +9,6 @@ const AdminUtilityController = require("../../../controllers/admin/adminUtilityC
 
 const Router = express.Router();
 
-// /apartments
-Router.route("/monthly-signed-statistics").get(
-  isAuth,
-  isAdmin,
-  AdminApartmentController.getMonthlySignedApt
-);
-
 // /apartments/:apartmentId/utilities
 Router.route("/:id/utilities")
   .post(

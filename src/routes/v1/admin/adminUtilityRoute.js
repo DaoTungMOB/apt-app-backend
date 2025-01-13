@@ -16,12 +16,15 @@ Router.route("/:id/invoices")
   )
   .get(isAuth, isAdmin, AdminInvoiceController.getUtilityInvoices);
 
-// /utilities/:id
-Router.route("/:id").put(
+Router.route("/:id/restore").put(
   isAuth,
   isAdmin,
-  UtilityValidation.update,
-  AdminUtilityController.update
+  AdminUtilityController.restore
 );
+
+// /utilities/:id
+Router.route("/:id")
+  .put(isAuth, isAdmin, UtilityValidation.update, AdminUtilityController.update)
+  .delete(isAuth, isAdmin, AdminUtilityController.softDelete);
 
 module.exports = Router;

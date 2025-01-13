@@ -24,6 +24,28 @@ const AdminUtilityController = {
       next(error);
     }
   },
+
+  softDelete: async (req, res, next) => {
+    try {
+      const { id } = req.params;
+      await UtilityService.softDelete(id);
+
+      return res.status(StatusCodes.NO_CONTENT).json();
+    } catch (error) {
+      next(error);
+    }
+  },
+
+  restore: async (req, res, next) => {
+    try {
+      const { id } = req.params;
+      await UtilityService.restore(id);
+
+      return res.status(StatusCodes.NO_CONTENT).json();
+    } catch (error) {
+      next(error);
+    }
+  },
 };
 
 module.exports = AdminUtilityController;

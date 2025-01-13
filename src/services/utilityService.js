@@ -74,6 +74,14 @@ const UtilityService = {
 
     return resp;
   },
+
+  softDelete: async (id) => {
+    await UtilityModel.softDelete(id);
+  },
+
+  restore: async (id) => {
+    await UtilityModel.restore(id);
+  },
 };
 
 module.exports = UtilityService;

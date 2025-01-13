@@ -73,6 +73,12 @@ const UtilityModel = {
         { $set: { deletedAt: Date.now() } }
       );
   },
+
+  restore: async (id) => {
+    await getDB()
+      .collection(UTILITY_COLLECTION_NAME)
+      .updateOne({ _id: new ObjectId(id) }, { $set: { deletedAt: null } });
+  },
 };
 
 module.exports = UtilityModel;

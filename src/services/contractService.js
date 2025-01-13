@@ -2,10 +2,11 @@ const { StatusCodes } = require("http-status-codes");
 const ContractModel = require("../models/contractModel");
 const UserModel = require("../models/userModel");
 const ApiError = require("../utils/ApiError");
+const ApartmentService = require("./apartmentService");
 
 const ContractService = {
   getAllApartmentContracts: async (apartmentId) => {
-    const apartment = await ContractModel.findOne(apartmentId);
+    const apartment = await ApartmentService.getById(apartmentId);
     if (!apartment) {
       throw new ApiError(StatusCodes.NOT_FOUND, "Apartment not found");
     }

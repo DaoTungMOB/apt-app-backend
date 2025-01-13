@@ -339,15 +339,17 @@ const ApartmentService = {
     );
 
     let aptSet = new Set();
+    let resp = [];
     apartments.forEach((item) => {
       if (item.status === "fulfilled" && item.value) {
         if (!aptSet.has(item.value._id)) {
           aptSet.add(item.value._id);
+          resp.push(item.value);
         }
       }
     });
 
-    return aptSet.size;
+    return resp;
   },
 
   update: async (id, reqBody) => {

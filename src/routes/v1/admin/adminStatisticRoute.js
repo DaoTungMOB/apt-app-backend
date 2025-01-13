@@ -1,5 +1,4 @@
 const express = require("express");
-const { isAuth, isAdmin } = require("../../../middlewares/auth");
 const AdminApartmentController = require("../../../controllers/admin/adminApartmentController");
 const AdminInvoiceController = require("../../../controllers/admin/adminInvoiceController");
 

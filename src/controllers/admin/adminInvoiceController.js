@@ -48,6 +48,34 @@ const AdminInvoiceController = {
     }
   },
 
+  pay: async (req, res, next) => {
+    try {
+      const { id: invoiceId } = req.params;
+
+      await InvoiceService.pay(invoiceId);
+
+      return res.status(StatusCodes.CREATED).json({
+        message: "Invoice paid successfully",
+      });
+    } catch (error) {
+      next(error);
+    }
+  },
+
+  cancelPayment: async (req, res, next) => {
+    try {
+      const { id: invoiceId } = req.params;
+
+      await InvoiceService.cancelPayment(invoiceId);
+
+      return res.status(StatusCodes.CREATED).json({
+        message: "Invoice cancel payment successfully",
+      });
+    } catch (error) {
+      next(error);
+    }
+  },
+
   update: async (req, res, next) => {
     try {
       const { id } = req.params;

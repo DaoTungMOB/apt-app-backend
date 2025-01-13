@@ -127,6 +127,24 @@ const InvoiceService = {
 
     return newInvoice;
   },
+
+  pay: async (invoiceId) => {
+    const now = dayjs();
+
+    await InvoiceModel.update(invoiceId, {
+      activatedAt: now.valueOf(),
+      status: true,
+    });
+  },
+
+  cancelPayment: async (invoiceId) => {
+    const now = dayjs();
+
+    await InvoiceModel.update(invoiceId, {
+      activatedAt: null,
+      status: false,
+    });
+  },
 };
 
 module.exports = InvoiceService;

@@ -81,6 +81,18 @@ const InvoiceModel = {
       });
   },
 
+  getLatestOfUtility: async (utilityId) => {
+    return await getDB()
+      .collection(INVOICE_COLLECTION_NAME)
+      .find({
+        utilityId: new ObjectId(utilityId),
+        status: true,
+      })
+      .sort({ year: -1, month: -1 })
+      .limit(1)
+      .toArray();
+  },
+
   update: async (_id, updateData, unsetData) => {
     INVALID_UPDATE_FIELDS.forEach((field) => {
       if (updateData.hasOwnProperty(field)) {

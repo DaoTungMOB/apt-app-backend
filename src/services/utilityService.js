@@ -8,15 +8,6 @@ const { getLastMonthAndYearFor } = require("../utils/time");
 const { ObjectId } = require("mongodb");
 
 const UtilityService = {
-  get: async (utilityId) => {
-    const utility = await UtilityModel.findOne(utilityId);
-    if (!utility) {
-      throw new ApiError(StatusCodes.NOT_FOUND, "Utility not found");
-    }
-
-    return utility;
-  },
-
   createNew: async (apartmentId, reqBody) => {
     const newUtility = await UtilityModel.createNew({
       ...reqBody,
@@ -30,6 +21,38 @@ const UtilityService = {
     const updatedUtility = await UtilityModel.update(id, reqBody);
 
     return updatedUtility;
+  },
+
+  get: async (utilityId, userId) => {
+    const utility = await UtilityModel.findOne(utilityId);
+    if (!utility) {
+      throw new ApiError(StatusCodes.NOT_FOUND, "Utility not found");
+    }
+    if (utility.userId !== userId) {
+      throw new ApiError(
+        StatusCodes.FORBIDDEN,
+        "You are not allowed to access this resource"
+      );
+    }
+
+    return utility;
+  },
+
+  getOneByAdmin: async (utilityId) => {
+    const utility = await UtilityModel.findOne(utilityId);
+    if (!utility) {
+      throw new ApiError(StatusCodes.NOT_FOUND, "Utility not found");
+    }
+
+    const latestInvoice = await InvoiceModel.getLatestOfUtility(utilityId);
+    if (latestInvoice.length > 0) {
+      utility.lastestInvoice = latestInvoice[0];
+      utility.paid = true;
+    } else {
+      utility.paid = false;
+    }
+
+    return utility;
   },
 
   getAptUtilities: async (apartmentId, reqData) => {

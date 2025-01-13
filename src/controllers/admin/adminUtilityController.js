@@ -13,6 +13,17 @@ const AdminUtilityController = {
     }
   },
 
+  get: async (req, res, next) => {
+    try {
+      const { id } = req.params;
+      const result = await UtilityService.getOneByAdmin(id);
+
+      return res.status(StatusCodes.OK).json(result);
+    } catch (error) {
+      next(error);
+    }
+  },
+
   getAptUtilities: async (req, res, next) => {
     try {
       const { id: apartmentId } = req.params;

@@ -23,7 +23,7 @@ Router.route("/:id/restore").put(
 );
 
 // /utilities/:id
-Router.route("/:id")
+Router.route("/:id").get(isAuth, isAdmin, AdminUtilityController.get)
   .put(isAuth, isAdmin, UtilityValidation.update, AdminUtilityController.update)
   .delete(isAuth, isAdmin, AdminUtilityController.softDelete);
 

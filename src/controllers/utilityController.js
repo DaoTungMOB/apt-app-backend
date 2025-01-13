@@ -5,8 +5,9 @@ const UtilityController = {
   get: async (req, res, next) => {
     try {
       const { id } = req.params;
+      const { userId } = req.payload;
 
-      const utility = await UtilityService.get(id);
+      const utility = await UtilityService.get(id, userId);
 
       return res.status(StatusCodes.OK).json(utility);
     } catch (error) {

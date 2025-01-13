@@ -52,7 +52,12 @@ const UtilityService = {
 
     const invoices = await Promise.allSettled(
       utilities.map((item) =>
-        InvoiceModel.getPaidWithYearAndMonth(item._id, year, month)
+        InvoiceModel.getPaidWithYearAndMonth(
+          apartment.userId,
+          item._id,
+          year,
+          month
+        )
       )
     );
 

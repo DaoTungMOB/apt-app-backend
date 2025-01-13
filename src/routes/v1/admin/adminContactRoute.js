@@ -9,6 +9,4 @@ Router.route("/:id")
   .get(AdminContactController.getOne)
   .put(ContactValidation.update, AdminContactController.updateOne);
 
-// TODO: get contacts
-
 module.exports = Router;

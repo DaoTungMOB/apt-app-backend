@@ -12,6 +12,18 @@ const AdminUtilityController = {
       next(error);
     }
   },
+
+  getAptUtilities: async (req, res, next) => {
+    try {
+      const { id: apartmentId } = req.params;
+      const { role } = req.payload;
+      const result = await UtilityService.getAptUtilities(apartmentId, role);
+
+      return res.status(StatusCodes.OK).json(result);
+    } catch (error) {
+      next(error);
+    }
+  },
 };
 
 module.exports = AdminUtilityController;

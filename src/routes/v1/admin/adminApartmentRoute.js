@@ -5,6 +5,7 @@ const AparmentValidation = require("../../../validations/apartmentValidation");
 const AdminApartmentUtilityController = require("../../../controllers/admin/adminApartmentUtilityController");
 const UtilityValidation = require("../../../validations/utilityValidation");
 const AdminContractController = require("../../../controllers/admin/adminContractController");
+const AdminUtilityController = require("../../../controllers/admin/adminUtilityController");
 
 const Router = express.Router();
 
@@ -16,12 +17,14 @@ Router.route("/monthly-signed-statistics").get(
 );
 
 // /apartments/:apartmentId/utilities
-Router.route("/:id/utilities").post(
-  isAuth,
-  isAdmin,
-  UtilityValidation.add,
-  AdminApartmentUtilityController.addUtility
-);
+Router.route("/:id/utilities")
+  .post(
+    isAuth,
+    isAdmin,
+    UtilityValidation.add,
+    AdminApartmentUtilityController.addUtility
+  )
+  .get(isAuth, isAdmin, AdminUtilityController.getAptUtilities);
 
 // /apartments/:apartmentId/status
 Router.route("/:id/status").put(

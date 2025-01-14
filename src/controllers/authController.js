@@ -53,7 +53,7 @@ const AuthController = {
     try {
       const result = await AuthService.verifyForgotPasswordOTP(req.body);
 
-      return res.status(StatusCodes.OK).json();
+      return res.status(StatusCodes.OK).json(result);
     } catch (error) {
       next(error);
     }

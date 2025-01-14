@@ -79,6 +79,20 @@ const AuthValidation = {
     }
   },
 
+  verifyForgotPassword: async (req, res, next) => {
+    const schema = Joi.object({
+      email: Joi.string().required().email(),
+      otp: Joi.string().required(),
+    });
+    try {
+      await schema.validateAsync(req.body, { abortEarly: false });
+
+      next();
+    } catch (error) {
+      next(new ApiError(StatusCodes.UNPROCESSABLE_ENTITY, error.message));
+    }
+  },
+
   resetPassword: async (req, res, next) => {
     const schema = Joi.object({
       newPassword: Joi.string().required().pattern(PASSWORD_RULE).messages({

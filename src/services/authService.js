@@ -204,9 +204,7 @@ const AuthService = {
         email: existUser.email,
       },
       env.SEND_MAIL_ACCESS_KEY,
-      {
-        expiresIn: "1h",
-      }
+      "1h"
     );
     await UserModel.update(existUser._id, { otp: null, otpExpiresAt: null });
 

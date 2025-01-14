@@ -2,6 +2,7 @@ const express = require("express");
 const AuthValidation = require("../../validations/authValidation");
 const AuthController = require("../../controllers/authController");
 const { canResetPassword } = require("../../middlewares/auth");
+const AuthMiddleware = require("../../middlewares/auth");
 
 const Router = express.Router();
 
@@ -16,6 +17,15 @@ Router.route("/forgot-password").post(
   AuthValidation.forgotPassword,
   AuthController.forgotPassword
 );
-Router.route("/reset-password").post(canResetPassword, AuthValidation.resetPassword, AuthController.resetPassword);
+Router.route("/verify-forgot-password").post(
+  AuthValidation.verifyForgotPassword,
+  AuthController.verifyForgotPasswordOTP
+);
+Router.route("/reset-password").post(
+  canResetPassword,
+  AuthMiddleware.canResetPassword,
+  AuthValidation.resetPassword,
+  AuthController.resetPassword
+);
 
 module.exports = Router;

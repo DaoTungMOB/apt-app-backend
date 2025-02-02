@@ -67,10 +67,21 @@ const ApartmentModel = {
       };
     }
 
-
     return await getDB()
       .collection(APARTMENT_COLLECTION_NAME)
-      .find(command)
+      .aggregate([
+        {
+          $match: command,
+        },
+        {
+          $lookup: {
+            from: "utilities",
+            localField: "_id",
+            foreignField: "apartmentId",
+            as: "utilities",
+          },
+        },
+      ])
       .toArray();
   },
 

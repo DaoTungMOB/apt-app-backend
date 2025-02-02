@@ -6,6 +6,7 @@ const UserModel = require("../models/userModel");
 const dayjs = require("dayjs");
 const UserService = require("./userService");
 const ApartmentService = require("./apartmentService");
+const { ObjectId } = require("mongodb");
 
 const InvoiceService = {
   create: async (utilityId, reqBody) => {
@@ -129,6 +130,29 @@ const InvoiceService = {
   },
 
   pay: async (invoiceId) => {
+    const invoice = await InvoiceService.get(invoiceId);
+    if (!invoice) {
+      throw new ApiError(StatusCodes.NOT_FOUND, "No invoice found");
+    }
+    const now = dayjs();
+
+    await InvoiceModel.update(invoiceId, {
+      activatedAt: now.valueOf(),
+      status: true,
+    });
+  },
+
+  userPayInvoice: async (invoiceId, userId) => {
+    const invoice = await InvoiceService.get(invoiceId);
+    if (!invoice) {
+      throw new ApiError(StatusCodes.NOT_FOUND, "No invoice found");
+    }
+    if (invoice.userId.toString() !== userId.toString()) {
+      throw new ApiError(
+        StatusCodes.FORBIDDEN,
+        "You are not allowed to pay this invoice"
+      );
+    }
     const now = dayjs();
 
     await InvoiceModel.update(invoiceId, {
@@ -138,8 +162,6 @@ const InvoiceService = {
   },
 
   cancelPayment: async (invoiceId) => {
-    const now = dayjs();
-
     await InvoiceModel.update(invoiceId, {
       activatedAt: null,
       status: false,

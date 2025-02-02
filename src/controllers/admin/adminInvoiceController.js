@@ -20,7 +20,7 @@ const AdminInvoiceController = {
 
       const result = await InvoiceService.get(id);
 
-      return res.status(StatusCodes.CREATED).json(result);
+      return res.status(StatusCodes.OK).json(result);
     } catch (error) {
       next(error);
     }
@@ -32,7 +32,7 @@ const AdminInvoiceController = {
 
       const result = await InvoiceService.getAll(utilityId);
 
-      return res.status(StatusCodes.CREATED).json(result);
+      return res.status(StatusCodes.OK).json(result);
     } catch (error) {
       next(error);
     }
@@ -42,7 +42,7 @@ const AdminInvoiceController = {
     try {
       const result = await InvoiceService.getMonthlyPaidInvoices();
 
-      return res.status(StatusCodes.CREATED).json(result);
+      return res.status(StatusCodes.OK).json(result);
     } catch (error) {
       next(error);
     }
@@ -54,7 +54,7 @@ const AdminInvoiceController = {
 
       await InvoiceService.pay(invoiceId);
 
-      return res.status(StatusCodes.CREATED).json({
+      return res.status(StatusCodes.OK).json({
         message: "Invoice paid successfully",
       });
     } catch (error) {
@@ -68,7 +68,7 @@ const AdminInvoiceController = {
 
       await InvoiceService.cancelPayment(invoiceId);
 
-      return res.status(StatusCodes.CREATED).json({
+      return res.status(StatusCodes.OK).json({
         message: "Invoice cancel payment successfully",
       });
     } catch (error) {
@@ -82,7 +82,7 @@ const AdminInvoiceController = {
 
       const result = await InvoiceService.update(id, req.body);
 
-      return res.status(StatusCodes.CREATED).json(result);
+      return res.status(StatusCodes.OK).json(result);
     } catch (error) {
       next(error);
     }

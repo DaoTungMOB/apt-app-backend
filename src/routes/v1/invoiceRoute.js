@@ -7,6 +7,6 @@ const Router = express.Router();
 
 Router.get("/:id", isAuth, InvoiceController.get);
 
-// TODO: get apartment's invoices history
+Router.put("/:id/pay", isAuth, InvoiceController.payInvoices);
 
 module.exports = Router;

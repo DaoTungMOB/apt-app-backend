@@ -7,7 +7,7 @@ const AdminUtilityController = {
       const { id } = req.params;
       const result = await UtilityService.update(id, req.body);
 
-      return res.status(StatusCodes.CREATED).json(result);
+      return res.status(StatusCodes.OK).json(result);
     } catch (error) {
       next(error);
     }

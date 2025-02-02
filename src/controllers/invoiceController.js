@@ -25,6 +25,21 @@ const InvoiceController = {
       next(error);
     }
   },
+
+  payInvoices: async (req, res, next) => {
+    try {
+      const { id: invoiceId } = req.params;
+      const { userId } = req.payload;
+
+      await InvoiceService.userPayInvoice(invoiceId, userId);
+
+      return res.status(StatusCodes.OK).json({
+        message: "Invoice paid successfully",
+      });
+    } catch (error) {
+      next(error);
+    }
+  },
 };
 
 module.exports = InvoiceController;

@@ -19,6 +19,8 @@ const UtilityController = {
     try {
       const { id: apartmentId } = req.params;
       const { userId, role } = req.payload;
+      console.log(userId);
+      console.log(role);
 
       const result = await UtilityService.getAptUtilities(apartmentId, {
         userId,

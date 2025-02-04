@@ -57,18 +57,23 @@ const UtilityService = {
 
   getAptUtilities: async (apartmentId, reqData) => {
     const apartment = await ApartmentService.getById(apartmentId);
+
+    const utilities = await UtilityModel.findAptUtilities(apartmentId);
+    if (utilities.length === 0) {
+      throw new ApiError(StatusCodes.NOT_FOUND, "No utilities found");
+    }
+
     if (reqData.role === ROLE.USER) {
+      if (!apartment.userId) {
+        return utilities;
+      }
+
       if (apartment.userId.toString() !== reqData.userId.toString()) {
         throw new ApiError(
           StatusCodes.FORBIDDEN,
           "You are not allowed to access this resource"
         );
       }
-    }
-
-    const utilities = await UtilityModel.findAptUtilities(apartmentId);
-    if (utilities.length === 0) {
-      throw new ApiError(StatusCodes.NOT_FOUND, "No utilities found");
     }
 
     const { month, year } = getLastMonthAndYearFor();
